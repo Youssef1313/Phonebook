@@ -2,5 +2,5 @@
 
 #include "PhonebookEntry.h"
 
-PhonebookEntry *Load(char *fileName, int *pNumberOfRecords);
+PhonebookEntry **Load(char *fileName, int *pNumberOfRecords);
 PhonebookEntry *ParseLine(char *line);
