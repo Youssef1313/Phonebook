@@ -20,6 +20,7 @@ PhonebookEntry *Load(char *fileName, int *pNumberOfRecords)
         {
             internalNumberOfRecords *= 2;
             pEntries = realloc(pEntries, sizeof(PhonebookEntry *) * internalNumberOfRecords);
+            // TODO: Check if re-allocation failed.
         }
         char line[MAX_LINE_LENGTH]; 
         fgets(line, sizeof(line), pFile);
@@ -27,4 +28,26 @@ PhonebookEntry *Load(char *fileName, int *pNumberOfRecords)
     }
 
     fclose(pFile);
+}
+
+PhonebookEntry *ParseLine(char *line)
+{
+    PhonebookEntry *pEntry = malloc(sizeof(PhonebookEntry));
+    char *lastName = strtok(line, ",");
+    char *firstName = strtok(NULL, ",");
+    char *birthDate = strtok(NULL, ",");
+    char *address = strtok(NULL, ",");
+    char *email = strtok(NULL, ",");
+    char *phone = strtok(NULL, ",");
+
+    strcpy(pEntry->lastName, lastName);
+    strcpy(pEntry->firstName, firstName);
+    strcpy(pEntry->address, address);
+    strcpy(pEntry->email, email);
+    strcpy(pEntry->phone, phone);
+
+    short day = atoi(strtok(birthDate, "-"));
+    short month = atoi(strtok(NULL, "-"));
+    short year = atoi(strtok(NULL, "-"));
+    pEntry->birthDate = (Date){ day, month, year };
 }
