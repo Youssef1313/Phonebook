@@ -33,3 +33,4 @@ typedef struct
 } PhonebookEntries;
 
 PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date birthDate, char *address, char *email, char *phone);
+void PrintEntries(PhonebookEntries *pEntries);

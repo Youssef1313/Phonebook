@@ -17,3 +17,19 @@ PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date bi
     strcpy(pEntry->phone, phone); // TODO: Optimization. Prevent buffer overflow.
     return pEntry;
 }
+
+void PrintEntries(PhonebookEntries *pEntries)
+{
+    printf("\n");
+    if (pEntries->actualNumber == 0)
+    {
+        printf("No records are found.\n\n");
+        return;
+    }
+    for (int i = 0; i < pEntries->actualNumber; i++)
+    {
+        printf("First name: %s, Last name: %s\n", pEntries->pEntries[i]->firstName, pEntries->pEntries[i]->lastName);
+        printf("Address: %s\n", pEntries->pEntries[i]->address);
+        printf("Email: %s, Phone: %s\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
+    }
+}
