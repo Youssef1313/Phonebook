@@ -1,6 +1,7 @@
 #include "PhonebookEntry.h"
 #include "Query.h"
 
+// TODO: For later improvment, make the function take an address of entries, and return address of entries.
 PhonebookEntries Search(char *lastName, PhonebookEntries entries)
 {
     PhonebookEntries filteredEntries;

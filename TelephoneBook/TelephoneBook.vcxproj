@@ -124,15 +124,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Adder.c" />
-    <ClCompile Include="Loader.c" />
+    <ClCompile Include="Add.c" />
+    <ClCompile Include="Delete.c" />
+    <ClCompile Include="Load.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="PhonebookEntry.c" />
     <ClCompile Include="Query.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Adder.h" />
-    <ClInclude Include="Loader.h" />
+    <ClInclude Include="Add.h" />
+    <ClInclude Include="Delete.h" />
+    <ClInclude Include="Load.h" />
     <ClInclude Include="PhonebookEntry.h" />
     <ClInclude Include="Query.h" />
   </ItemGroup>

@@ -18,16 +18,19 @@
     <ClCompile Include="Main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Loader.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PhonebookEntry.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Query.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Adder.c">
+    <ClCompile Include="Add.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Load.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Delete.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +38,16 @@
     <ClInclude Include="PhonebookEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Query.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Adder.h">
+    <ClInclude Include="Add.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Load.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Delete.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
