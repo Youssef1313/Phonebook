@@ -1,6 +1,6 @@
+#include <stdlib.h>
 #include "Delete.h"
 #include "PhonebookEntry.h"
-#include <stdio.h>
 
 void DeleteEntry(PhonebookEntries *pEntries, int indexToDelete)
 {
