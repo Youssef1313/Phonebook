@@ -33,4 +33,3 @@ typedef struct
 } PhonebookEntries;
 
 PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date birthDate, char *address, char *email, char *phone);
-Date *ConstructDate(short day, short month, short year);

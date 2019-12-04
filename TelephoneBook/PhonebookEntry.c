@@ -15,13 +15,3 @@ PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date bi
     strcpy(pEntry->phone, phone); // TODO: Optimization. Prevent buffer overflow.
     return pEntry;
 }
-
-Date *ConstructDate(short day, short month, short year)
-{
-    Date *pDate = malloc(sizeof(Date));
-    // TODO: check if allocation failed.
-    pDate->day = day;
-    pDate->month = month;
-    pDate->year = year;
-    return pDate;
-}

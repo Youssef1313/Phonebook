@@ -7,12 +7,12 @@ int main(void)
 {
     PhonebookEntries x = Load("C:\\phonebook.txt");
     PhonebookEntries y = Search("aiman", x);
-    for (int i = 0; i < y.actualNumber; i++)
+    for (int i = 0; i < x.actualNumber; i++)
     {
-        printf("First name:%s\n", y.pEntries[i]->firstName);
-        printf("Last name:%s\n", y.pEntries[i]->lastName);
-        printf("Address: %s\n", y.pEntries[i]->address);
-        printf("Email: %s\n\n", y.pEntries[i]->email);
+        printf("First name:%s\n", x.pEntries[i]->firstName);
+        printf("Last name:%s\n", x.pEntries[i]->lastName);
+        printf("Address: %s\n", x.pEntries[i]->address);
+        printf("Email: %s\n\n", x.pEntries[i]->email);
     }
 
     /*PhonebookEntry *entry = ConstructPhonebookEntry("Victor", "Youssef", date, "Sidi bishr", "MyEmail@gmail.com", "01287946618");

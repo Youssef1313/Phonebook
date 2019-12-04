@@ -41,7 +41,6 @@ PhonebookEntries Load(char *fileName)
 
 PhonebookEntry *ParseLine(char *line)
 {
-    PhonebookEntry *pEntry = malloc(sizeof(PhonebookEntry));
     char *lastName = strtok(line, ",");
     char *firstName = strtok(NULL, ",");
     char *birthDate = strtok(NULL, ",");
@@ -49,16 +48,9 @@ PhonebookEntry *ParseLine(char *line)
     char *email = strtok(NULL, ",");
     char *phone = strtok(NULL, ",");
 
-    strcpy(pEntry->lastName, lastName);
-    strcpy(pEntry->firstName, firstName);
-    strcpy(pEntry->address, address);
-    strcpy(pEntry->email, email);
-    strcpy(pEntry->phone, phone);
-    
     short day = atoi(strtok(birthDate, "-"));
     short month = atoi(strtok(NULL, "-"));
     short year = atoi(strtok(NULL, "-"));
     
-    pEntry->birthDate = (Date){ day, month, year };
-    return pEntry;
+    return ConstructPhonebookEntry(lastName, firstName, (Date) { day, month, year }, address, email, phone);
 }
