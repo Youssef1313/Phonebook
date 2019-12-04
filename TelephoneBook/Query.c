@@ -1,4 +1,5 @@
 #include "PhonebookEntry.h"
+#include "Query.h"
 
 PhonebookEntries Search(char *lastName, PhonebookEntries entries)
 {
