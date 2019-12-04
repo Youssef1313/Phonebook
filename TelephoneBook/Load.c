@@ -25,6 +25,7 @@ PhonebookEntries Load(char *fileName)
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), pFile))
     {
+        // TODO: Consider refactoring this to use the AddEntry method from Add.h
         if (entries.actualNumber >= entries.allocated)
         {
             entries.allocated *= 2;
