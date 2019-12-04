@@ -24,12 +24,18 @@
     <ClCompile Include="PhonebookEntry.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Query.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhonebookEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Query.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

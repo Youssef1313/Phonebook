@@ -127,10 +127,12 @@
     <ClCompile Include="Loader.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="PhonebookEntry.c" />
+    <ClCompile Include="Query.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Loader.h" />
     <ClInclude Include="PhonebookEntry.h" />
+    <ClInclude Include="Query.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
