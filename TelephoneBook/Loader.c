@@ -6,35 +6,37 @@
 
 #define MAX_LINE_LENGTH (2 * MAX_NAME_LENGTH + MAX_ADDRESS_LENGTH + MAX_EMAIL_LENGTH + MAX_PHONE_LENGTH + 16) // 16 is for: 5 commas, 1 '\n', and  for birthdate (e.g. 07-03-1999).
 
-PhonebookEntry **Load(char *fileName, int *pNumberOfRecords)
+PhonebookEntries Load(char *fileName)
 {
-    *pNumberOfRecords = 0;
-    int internalNumberOfRecords = 4;
-    PhonebookEntry **pEntries = malloc(sizeof(PhonebookEntry *) * internalNumberOfRecords);
+    PhonebookEntries entries;
+    entries.actualNumber = 0;
+    entries.allocated = 4;
+    entries.pEntries = malloc(sizeof(PhonebookEntry *) * entries.allocated);;
     // TODO: Check if allocation failed and take appropriate action.
 
     FILE *pFile = fopen(fileName, "r");
     if (!pFile)
     {
         printf("UNABLE TO READ THE FILE.\n");
-        return NULL;
+        entries.actualNumber = -1;
+        return entries;
     }
     
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), pFile))
     {
-        if (*pNumberOfRecords >= internalNumberOfRecords)
+        if (entries.actualNumber >= entries.allocated)
         {
-            internalNumberOfRecords *= 2;
-            pEntries = realloc(pEntries, sizeof(PhonebookEntry *) * internalNumberOfRecords);
+            entries.allocated *= 2;
+            entries.pEntries = realloc(entries.pEntries, sizeof(PhonebookEntry *) * entries.allocated);
             // TODO: Check if re-allocation failed.
         }
-        pEntries[*pNumberOfRecords] = ParseLine(line);
-        (*pNumberOfRecords)++;
+        entries.pEntries[entries.actualNumber] = ParseLine(line);
+        entries.actualNumber++;
        
     }
     fclose(pFile);
-    return pEntries;
+    return entries;
 }
 
 PhonebookEntry *ParseLine(char *line)

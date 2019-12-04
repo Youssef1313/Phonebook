@@ -2,4 +2,4 @@
 
 #include "PhonebookEntry.h"
 
-PhonebookEntry **Search(char *lastName, PhonebookEntry **entries, int numberOfTotalEntries, int *numberOfMatches);
+PhonebookEntries Search(char *lastName, PhonebookEntries entries);

@@ -5,16 +5,14 @@
 
 int main(void)
 {
-    int n;
-    int n2;
-    PhonebookEntry **x = Load("C:\\phonebook.txt", &n);
-    PhonebookEntry **y = Search("aiman", x, n, &n2);
-    for (int i = 0; i < n2; i++)
+    PhonebookEntries x = Load("C:\\phonebook.txt");
+    PhonebookEntries y = Search("aiman", x);
+    for (int i = 0; i < y.actualNumber; i++)
     {
-        printf("First name:%s\n", y[i]->firstName);
-        printf("Last name:%s\n", y[i]->lastName);
-        printf("Address: %s\n", y[i]->address);
-        printf("Email: %s\n", y[i]->email);
+        printf("First name:%s\n", y.pEntries[i]->firstName);
+        printf("Last name:%s\n", y.pEntries[i]->lastName);
+        printf("Address: %s\n", y.pEntries[i]->address);
+        printf("Email: %s\n\n", y.pEntries[i]->email);
     }
 
     /*PhonebookEntry *entry = ConstructPhonebookEntry("Victor", "Youssef", date, "Sidi bishr", "MyEmail@gmail.com", "01287946618");

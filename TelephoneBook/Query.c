@@ -1,23 +1,23 @@
 #include "PhonebookEntry.h"
 
-PhonebookEntry **Search(char *lastName, PhonebookEntry **entries, int numberOfTotalEntries, int *pNumberOfMatches)
+PhonebookEntries Search(char *lastName, PhonebookEntries entries)
 {
-    int internalSize = 4;
-    PhonebookEntry **pResult = malloc(sizeof(PhonebookEntry *) * internalSize);
-    *pNumberOfMatches = 0;
-    for (int i = 0; i < numberOfTotalEntries; i++)
+    PhonebookEntries filteredEntries;
+    filteredEntries.actualNumber = 0;
+    filteredEntries.allocated = 4;
+    filteredEntries.pEntries = malloc(sizeof(PhonebookEntry *) * filteredEntries.allocated);
+    for (int i = 0; i < entries.actualNumber; i++)
     {
-        if (!_stricmp(entries[i]->lastName, lastName))
+        if (!_stricmp(entries.pEntries[i]->lastName, lastName))
         {
-            if (*pNumberOfMatches >= internalSize)
+            if (filteredEntries.actualNumber >= filteredEntries.allocated)
             {
-                internalSize *= 2;
-                pResult = realloc(pResult, sizeof(PhonebookEntry *) * internalSize);
+                filteredEntries.allocated *= 2;
+                filteredEntries.pEntries = realloc(filteredEntries.pEntries, sizeof(PhonebookEntry *) * filteredEntries.allocated);
                 // TODO: Check if re-allocation failed.
             }
-            pResult[*pNumberOfMatches] = entries[i];
-            (*pNumberOfMatches)++;
+            filteredEntries.pEntries[filteredEntries.actualNumber++] = entries.pEntries[i];
         }
     }
-    return pResult;
+    return filteredEntries;
 }

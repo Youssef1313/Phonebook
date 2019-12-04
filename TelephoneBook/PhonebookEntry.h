@@ -25,5 +25,12 @@ typedef struct
     char phone[MAX_PHONE_LENGTH];
 } PhonebookEntry;
 
+typedef struct
+{
+    PhonebookEntry **pEntries;
+    int actualNumber;
+    int allocated;
+} PhonebookEntries;
+
 PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date birthDate, char *address, char *email, char *phone);
 Date *ConstructDate(short day, short month, short year);
