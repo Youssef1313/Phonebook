@@ -26,6 +26,7 @@ PhonebookEntries Load(char *fileName)
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), pFile))
     {
+        strtok(line, "\n"); // Remove the \n from the end of the line if exists.
         // TODO: Consider refactoring this to use the AddEntry method from Add.h
         if (entries.actualNumber >= entries.allocated)
         {

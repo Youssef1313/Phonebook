@@ -30,6 +30,6 @@ void PrintEntries(PhonebookEntries *pEntries)
     {
         printf("First name: %s, Last name: %s\n", pEntries->pEntries[i]->firstName, pEntries->pEntries[i]->lastName);
         printf("Address: %s\n", pEntries->pEntries[i]->address);
-        printf("Email: %s, Phone: %s\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
+        printf("Email: %s, Phone: %s\n\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
     }
 }
