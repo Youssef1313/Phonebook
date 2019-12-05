@@ -166,8 +166,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 char confirmation[4];
                 printf("WARNING: There is unsaved changes. Enter 'yes' to confirm quitting: ");
                 GetString(confirmation, sizeof(confirmation));
-                if (!strcmp(confirmation, "yes")) break;
-                printf("Quitting is cancelled.\n\n");
+                if (strcmp(confirmation, "yes")) continue;
             }
         }
         else
