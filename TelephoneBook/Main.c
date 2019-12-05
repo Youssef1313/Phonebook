@@ -15,6 +15,7 @@
 #define FILE_PATH "C:\\phonebook.txt"
 
 PhonebookEntry *GetEntryFromUser(bool allowEmpty);
+void GetString(char *buffer, int count);
 
 int main(void)
 {
@@ -34,14 +35,13 @@ The following is a list of the allowed commands to run the program:\n\n\
     {
         char command[MAX_COMMAND_LENGTH];
         printf("Enter a command: ");
-        fgets(command, sizeof(command), stdin);
-        fseek(stdin, 0, SEEK_END);
-        if (!_stricmp(command, "LOAD\n") || !_stricmp(command, "1\n"))
+        GetString(command, sizeof(command));
+        if (!_stricmp(command, "LOAD") || !_stricmp(command, "1"))
         {
             entries = Load(FILE_PATH);
             printf("File is loaded successfully. It has %d record(s).\n\n", entries.actualNumber);
         }
-        else if (!_stricmp(command, "QUERY\n") || !_stricmp(command, "2\n"))
+        else if (!_stricmp(command, "QUERY") || !_stricmp(command, "2"))
         {
             printf("When prompted to any field, leaving it empty means it won't be used in searching.\n");
             PhonebookEntry *pSearchEntry = GetEntryFromUser(true);
@@ -49,7 +49,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             PrintEntries(&filtered);
             free(pSearchEntry);
         }
-        else if (!_stricmp(command, "ADD\n") || !_stricmp(command, "3\n"))
+        else if (!_stricmp(command, "ADD") || !_stricmp(command, "3"))
         {
             printf("When prompted to any field, leaving it empty will result in cancelling adding this record.\n");
             PhonebookEntry *pNewEntry = GetEntryFromUser(false);
@@ -62,27 +62,26 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf("\033[31;1m You've cancelled the add process.\n\n \033[0m\n");
 
         }
-        else if (!_stricmp(command, "DELETE") || !_stricmp(command, "4\n"))
+        else if (!_stricmp(command, "DELETE") || !_stricmp(command, "4"))
         {
             char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH];
             printf("\tYou will be prompted for first name and last name. If multiple records are found, you will be asked to select one.\n");
             printf("\t\tEnter last name to delete: ");
-            fgets(lastName, sizeof(lastName), stdin);
-            fseek(stdin, 0, SEEK_END);
+            GetString(lastName, sizeof(lastName));
         }
-        else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5\n"))
+        else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {
 
         }
-        else if (!_stricmp(command, "PRINT\n") || !_stricmp(command, "6\n"))
+        else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
 
         }
-        else if (!_stricmp(command, "SAVE\n") || !_stricmp(command, "7\n"))
+        else if (!_stricmp(command, "SAVE") || !_stricmp(command, "7"))
         {
 
         }
-        else if (!_stricmp(command, "QUIT\n") || !_stricmp(command, "8\n"))
+        else if (!_stricmp(command, "QUIT") || !_stricmp(command, "8"))
         {
 
         }
@@ -102,6 +101,14 @@ The following is a list of the allowed commands to run the program:\n\n\
     return 0;
 }
 
+void GetString(char *buffer, int count)
+{
+    fgets(buffer, count, stdin);
+    fseek(stdin, 0, SEEK_END);
+    int length = strlen(buffer);
+    if (buffer[length - 1] == '\n') buffer[length - 1] = '\0';
+}
+
 
 PhonebookEntry *GetEntryFromUser(bool allowEmpty)
 {
@@ -113,43 +120,32 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     char dateString[11]; // 07-03-1999 (10 chars + '\0')
     // TODO: add validation to all fields.
     printf("\tEnter last name: ");
-    fgets(lastName, sizeof(lastName), stdin);
-    fseek(stdin, 0, SEEK_END);
-    if (!allowEmpty && strlen(lastName) == 1) return NULL;
-    if (lastName[strlen(lastName) - 1] == '\n') lastName[strlen(lastName) - 1] = '\0';
-
+    GetString(lastName, sizeof(lastName));
+    if (!allowEmpty && lastName[0] == '\0') return NULL;
+    
     printf("\tEnter first name: ");
-    fgets(firstName, sizeof(firstName), stdin);
-    fseek(stdin, 0, SEEK_END);
-    if (!allowEmpty && strlen(firstName) == 1) return NULL;
-    if (firstName[strlen(firstName) - 1] == '\n') firstName[strlen(firstName) - 1] = '\0';
+    GetString(firstName, sizeof(firstName));
+    if (!allowEmpty && firstName[0] == '\0') return NULL;
 
     printf("\tEnter address: ");
-    fgets(address, sizeof(address), stdin);
-    fseek(stdin, 0, SEEK_END);
-    if (!allowEmpty && strlen(address) == 1) return NULL;
-    if (address[strlen(address) - 1] == '\n') address[strlen(address) - 1] = '\0';
+    GetString(address, sizeof(address));
+    if (!allowEmpty && address[0] == '\0') return NULL;
 
     printf("\tEnter email: ");
-    fgets(email, sizeof(email), stdin);
-    fseek(stdin, 0, SEEK_END);
-    if (!allowEmpty && strlen(email) == 1) return NULL;
-    if (email[strlen(email) - 1] == '\n') email[strlen(email) - 1] = '\0';
+    GetString(email, sizeof(email));
+    if (!allowEmpty && email[0] == '\0') return NULL;
 
     printf("\tEnter phone: ");
-    fgets(phone, sizeof(phone), stdin);
-    fseek(stdin, 0, SEEK_END);
-    if (!allowEmpty && strlen(phone) == 1) return NULL;
-    if (phone[strlen(phone) - 1] == '\n') phone[strlen(phone) - 1] = '\0';
+    GetString(phone, sizeof(phone));
+    if (!allowEmpty && phone[0] == '\0') return NULL;
 
     short day = 0, month = 0, year = 0;
     do
     {
-        printf("\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy (Leave blank to cancel adding the phonebook entry): ");
-        fgets(dateString, sizeof(dateString), stdin);
-        fseek(stdin, 0, SEEK_END);
-        if (!allowEmpty && strlen(dateString) == 1) return NULL;
-        if (dateString[strlen(dateString) - 1] == '\n') dateString[strlen(dateString) - 1] = '\0';
+        printf("\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: ");
+        GetString(dateString, sizeof(dateString));
+        if (!allowEmpty && dateString[0] == '\0') return NULL;
+        if (dateString[0] == '\0') break;
         char *dayToken = strtok(dateString, "-/");
         if (!dayToken) continue;
         day = atoi(dayToken);
@@ -161,7 +157,7 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
         char *yearToken = strtok(NULL, "-/");
         if (!yearToken) continue;
         year = atoi(yearToken);
-    } while (!allowEmpty && (!day || !month || !year)); // TODO: Consider adding `|| !IsValid(day, month, year)` to the condition.
+    } while (!day || !month || !year); // TODO: Consider adding `|| !IsValid(day, month, year)` to the condition.
 
     return ConstructPhonebookEntry(lastName, firstName, (Date) { day, month, year }, address, email, phone);
 }
