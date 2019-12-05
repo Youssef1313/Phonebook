@@ -33,6 +33,12 @@
     <ClCompile Include="Delete.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Validation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Modify.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhonebookEntry.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Delete.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Validation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Modify.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

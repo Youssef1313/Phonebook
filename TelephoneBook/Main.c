@@ -6,10 +6,13 @@
 #include "Add.h"
 #include "Delete.h"
 #include "Load.h"
+#include "Modify.h"
 #include "PhonebookEntry.h"
 #include "Query.h"
+#include "Validation.h"
 
 // Longest commands are DELETE and MODIFY (6 chars + '\0' = 7 chars).
+// TODO: When implementing validation, implement separate functions to prompt for each field.
 #define MAX_COMMAND_LENGTH 7
 #define FILE_PATH "C:\\phonebook.txt"
 
@@ -25,7 +28,7 @@ The following is a list of the allowed commands to run the program:\n\n\
     3. ADD    -> Add new entry to phonebook.\n\
     4. DELETE -> Deletes an entry by providing first and last name.\n\
     5. MODIFY -> Modify a record.\n\
-    6. PRINT  -> Print the phonebook in sorted order\n\
+    6. PRINT  -> Print the phonebook in sorted order.\n\
     7. SAVE   -> Save the changes you made to the hard disk.\n\
     8. QUIT   -> Exit without saving.\n\n");
     PhonebookEntries entries = Load(NULL);
@@ -88,7 +91,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             else
             {
                 printf("Found multiple results:\n");
-                PrintNumberedEntries(&entries);
+                PrintNumberedEntries(&filtered);
                 printf("Enter the number of the record (between 1 and %d) you want to delete: ", filtered.actualNumber);
                 int recordNumber = 0;
                 do
@@ -103,7 +106,44 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {
+            char lastName[MAX_NAME_LENGTH];
+            printf("\tYou will be prompted for last name. If multiple records are found, you will be asked to select one.\n");
+            do
+            {
+                printf("\t\tEnter last name: ");
+                GetString(lastName, sizeof(lastName));
+            } while (!*lastName);
+            
+            PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
+            PhonebookEntries filtered = MultiSearch(pEntry, &entries);
+            free(pEntry);
+            if (filtered.actualNumber == 0)
+                printf("No records are found.\n\n");
+            else if (filtered.actualNumber == 1)
+            {
+                printf("You will be prompted for new info, leave any field blank to keep it unchanged.\n");
+                PhonebookEntry *pEntry = GetEntryFromUser(true);
+                ModifyRecord(filtered.pEntries[0], pEntry); // This function will call free on pEntry.
+                printf("Field is modified!\n\n");
+            }
+            else
+            {
+                printf("Found multiple results:\n");
+                PrintNumberedEntries(&filtered);
+                printf("Enter the number of the record (between 1 and %d) you want to modify: ", filtered.actualNumber);
+                int recordNumber = 0;
+                do
+                {
+                    char numberString[5];
+                    GetString(numberString, sizeof(numberString));
+                    recordNumber = atoi(numberString);
+                } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
 
+                printf("You will be prompted for new info, leave any field blank to keep it unchanged.\n");
+                PhonebookEntry *pEntry = GetEntryFromUser(true);
+                ModifyRecord(filtered.pEntries[recordNumber - 1], pEntry); // This function will call free on pEntry.
+                printf("Field is modified!\n\n");
+            }
         }
         else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
@@ -171,25 +211,14 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     GetString(phone, sizeof(phone));
     if (!allowEmpty && phone[0] == '\0') return NULL;
 
-    short day = 0, month = 0, year = 0;
-    do
+    Date birthdate;
+    while (1)
     {
         printf("\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: ");
         GetString(dateString, sizeof(dateString));
-        if (!allowEmpty && dateString[0] == '\0') return NULL;
+        if (!allowEmpty && dateString[0] == '\0') return NULL; // Meaning to cancel.
         if (dateString[0] == '\0') break;
-        char *dayToken = strtok(dateString, "-/");
-        if (!dayToken) continue;
-        day = atoi(dayToken);
-
-        char *monthToken = strtok(NULL, "-/");
-        if (!monthToken) continue;
-        month = atoi(monthToken);
-
-        char *yearToken = strtok(NULL, "-/");
-        if (!yearToken) continue;
-        year = atoi(yearToken);
-    } while (!day || !month || !year); // TODO: Consider adding `|| !IsValid(day, month, year)` to the condition.
-
-    return ConstructPhonebookEntry(lastName, firstName, (Date) { day, month, year }, address, email, phone);
+        if (IsValidDate(dateString, &birthdate)) break;
+    }
+    return ConstructPhonebookEntry(lastName, firstName, birthdate, address, email, phone);
 }
