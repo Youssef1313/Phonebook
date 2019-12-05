@@ -26,6 +26,7 @@ void PrintEntries(PhonebookEntries *pEntries)
         printf("No records are found.\n\n");
         return;
     }
+    printf("Printing %d record(s)\n\n", pEntries->actualNumber);
     for (int i = 0; i < pEntries->actualNumber; i++)
     {
         printf("First name: %s, Last name: %s\n", pEntries->pEntries[i]->firstName, pEntries->pEntries[i]->lastName);

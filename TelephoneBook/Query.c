@@ -3,7 +3,7 @@
 #include "PhonebookEntry.h"
 #include "Query.h"
 
-PhonebookEntries Search(char *lastName, PhonebookEntries *pEntries)
+PhonebookEntries MultiSearch(PhonebookEntry *pEntryToSearchFor, PhonebookEntries *pEntries)
 {
     PhonebookEntries filteredEntries;
     filteredEntries.actualNumber = 0;
@@ -11,7 +11,14 @@ PhonebookEntries Search(char *lastName, PhonebookEntries *pEntries)
     filteredEntries.pEntries = malloc(sizeof(PhonebookEntry *) * filteredEntries.allocated);
     for (int i = 0; i < pEntries->actualNumber; i++)
     {
-        if (!_stricmp(pEntries->pEntries[i]->lastName, lastName))
+        if (
+            (!*pEntryToSearchFor->lastName || !_stricmp(pEntries->pEntries[i]->lastName, pEntryToSearchFor->lastName)) &&
+            (!*pEntryToSearchFor->firstName || !_stricmp(pEntries->pEntries[i]->firstName, pEntryToSearchFor->firstName)) &&
+            (!*pEntryToSearchFor->address || !_stricmp(pEntries->pEntries[i]->address, pEntryToSearchFor->address)) &&
+            (!*pEntryToSearchFor->email || !_stricmp(pEntries->pEntries[i]->email, pEntryToSearchFor->email)) &&
+            (!*pEntryToSearchFor->phone || !_stricmp(pEntries->pEntries[i]->phone, pEntryToSearchFor->phone)) &&
+            ((!pEntryToSearchFor->birthDate.day && !pEntryToSearchFor->birthDate.month && !pEntryToSearchFor->birthDate.year) || (pEntries->pEntries[i]->birthDate.day == pEntryToSearchFor->birthDate.day && pEntries->pEntries[i]->birthDate.month == pEntryToSearchFor->birthDate.month && pEntries->pEntries[i]->birthDate.year == pEntryToSearchFor->birthDate.year))
+            )
         {
             if (filteredEntries.actualNumber >= filteredEntries.allocated)
             {
