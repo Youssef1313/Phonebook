@@ -2,4 +2,4 @@
 
 #include "PhonebookEntry.h"
 
-void DeleteEntry(PhonebookEntries *pEntries, int indexToDelete);
+void DeleteEntry(PhonebookEntries *pEntries, PhonebookEntry *pEntry);

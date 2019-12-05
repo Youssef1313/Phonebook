@@ -66,8 +66,11 @@ The following is a list of the allowed commands to run the program:\n\n\
         {
             char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH];
             printf("\tYou will be prompted for first name and last name. If multiple records are found, you will be asked to select one.\n");
-            printf("\t\tEnter last name to delete: ");
+            printf("\t\tEnter last name: ");
             GetString(lastName, sizeof(lastName));
+            printf("\t\tEnter first name: ");
+            GetString(firstName, sizeof(firstName));
+            PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {

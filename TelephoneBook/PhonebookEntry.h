@@ -1,8 +1,5 @@
 #pragma once
 
-#include <stdlib.h>
-#include <string.h>
-
 #define MAX_NAME_LENGTH 20
 #define MAX_ADDRESS_LENGTH 300
 #define MAX_EMAIL_LENGTH 50
