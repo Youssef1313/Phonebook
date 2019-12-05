@@ -43,7 +43,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         else if (!_stricmp(command, "QUERY\n") || !_stricmp(command, "2\n"))
         {
             char lastName[MAX_NAME_LENGTH];
-            printf("Enter last name to search for: ");
+            printf("\tEnter last name to search for: ");
             fgets(lastName, MAX_NAME_LENGTH, stdin);
             fseek(stdin, 0, SEEK_END);
             strtok(lastName, "\n");
@@ -52,11 +52,22 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "ADD\n") || !_stricmp(command, "3\n"))
         {
-            AddEntry(&entries, GetEntryFromUser());
+            PhonebookEntry *pNewEntry = GetEntryFromUser();
+            if (pNewEntry)
+            {
+                AddEntry(&entries, pNewEntry);
+                printf("\033[32;1m Record is added.\n\n \033[0m\n");
+            }
+            else
+                printf("\033[31;1m You've cancelled the add process.\n\n \033[0m\n");
+
         }
         else if (!_stricmp(command, "DELETE") || !_stricmp(command, "4\n"))
         {
-
+            char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH];
+            printf("\tYou will be prompted for first name and last name. If multiple records are found, you will be asked to select one.\n");
+            printf("\t\tEnter last name to delete: ");
+            fgets(lastName, sizeof(lastName), stdin);
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5\n"))
         {
@@ -76,7 +87,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else
         {
-            printf("You entered an unknown command.\n");
+            printf("You entered an unknown command.\n\n");
         }
     }
 
@@ -100,7 +111,7 @@ PhonebookEntry *GetEntryFromUser(void)
     char phone[MAX_PHONE_LENGTH];
     char dateString[11]; // 07-03-1999 (10 chars + '\0')
     // TODO: add validation to all fields.
-    printf("When prompted to any field, leaving it empty will result in add cancellation.\n");
+    printf("When prompted to any field, leaving it empty will result in cancelling adding this record.\n");
     printf("\tEnter last name: ");
     fgets(lastName, sizeof(lastName), stdin);
     fseek(stdin, 0, SEEK_END);
@@ -140,10 +151,18 @@ PhonebookEntry *GetEntryFromUser(void)
         if (strlen(dateString) == 1) return NULL;
         strtok(dateString, "\n");
 
-        day = atoi(strtok(dateString, "-/"));
-        month = atoi(strtok(NULL, "-/"));
-        year = atoi(strtok(NULL, "-/"));
+        char *dayToken = strtok(dateString, "-/");
+        if (!dayToken) continue;
+        day = atoi(dayToken);
+
+        char *monthToken = strtok(NULL, "-/");
+        if (!monthToken) continue;
+        month = atoi(monthToken);
+
+        char *yearToken = strtok(NULL, "-/");
+        if (!yearToken) continue;
+        year = atoi(yearToken);
     } while (!day || !month || !year); // TODO: Consider adding `|| !IsValid(day, month, year)` to the condition.
-   
-    return ConstructPhonebookEntry(lastName, firstName, (Date){ day, month, year }, address, email, phone);
+
+    return ConstructPhonebookEntry(lastName, firstName, (Date) { day, month, year }, address, email, phone);
 }
