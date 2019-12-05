@@ -32,7 +32,7 @@ The following is a list of the allowed commands to run the program:\n\n\
     7. SAVE   -> Save the changes you made to the hard disk.\n\
     8. QUIT   -> Exit without saving.\n\n");
     PhonebookEntries entries = Load(NULL);
-
+    int unsavedChanges = 0;
     while (1)
     {
         char command[MAX_COMMAND_LENGTH];
@@ -41,6 +41,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         if (!_stricmp(command, "LOAD") || !_stricmp(command, "1"))
         {
             entries = Load(FILE_PATH);
+            unsavedChanges = 0;
             printf("File is loaded successfully. It has %d record(s).\n\n", entries.actualNumber);
         }
         else if (!_stricmp(command, "QUERY") || !_stricmp(command, "2"))
@@ -58,6 +59,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             if (pNewEntry)
             {
                 AddEntry(&entries, pNewEntry);
+                unsavedChanges = 1;
                 printf("\033[32;1m Record is added.\n\n \033[0m\n");
             }
             else
@@ -86,6 +88,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             else if (filtered.actualNumber == 1)
             {
                 DeleteEntry(&entries, filtered.pEntries[0]);
+                unsavedChanges = 1;
                 printf("Entry is deleted successfully. Current number of records is %d.\n\n", entries.actualNumber);
             }
             else
@@ -101,6 +104,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                     recordNumber = atoi(numberString);
                 } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
                 DeleteEntry(&entries, filtered.pEntries[recordNumber - 1]);
+                unsavedChanges = 1;
                 printf("Entry is deleted successfully. Current number of records is %d.\n\n", entries.actualNumber);
             }
         }
@@ -113,7 +117,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf("\t\tEnter last name: ");
                 GetString(lastName, sizeof(lastName));
             } while (!*lastName);
-            
+
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
             free(pEntry);
@@ -124,6 +128,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf("You will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pEntry = GetEntryFromUser(true);
                 ModifyRecord(filtered.pEntries[0], pEntry); // This function will call free on pEntry.
+                unsavedChanges = 1;
                 printf("Field is modified!\n\n");
             }
             else
@@ -142,6 +147,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf("You will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pEntry = GetEntryFromUser(true);
                 ModifyRecord(filtered.pEntries[recordNumber - 1], pEntry); // This function will call free on pEntry.
+                unsavedChanges = 1;
                 printf("Field is modified!\n\n");
             }
         }
@@ -151,11 +157,18 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "SAVE") || !_stricmp(command, "7"))
         {
-
+            unsavedChanges = 0;
         }
         else if (!_stricmp(command, "QUIT") || !_stricmp(command, "8"))
         {
-
+            if (unsavedChanges)
+            {
+                char confirmation[4];
+                printf("WARNING: There is unsaved changes. Enter 'yes' to confirm quitting: ");
+                GetString(confirmation, sizeof(confirmation));
+                if (!strcmp(confirmation, "yes")) break;
+                printf("Quitting is cancelled.\n\n");
+            }
         }
         else
         {
@@ -163,13 +176,6 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
     }
 
-
-    /*PhonebookEntry *entry = ConstructPhonebookEntry("Victor", "Youssef", date, "Sidi bishr", "MyEmail@gmail.com", "01287946618");
-    printf("First name: %s\n", entry->firstName);
-    printf("Last name: %s\n", entry->lastName);
-    printf("Address: %s\n", entry->address);
-    printf("Email: %s\n", entry->email);
-    printf("Phone: %s\n", entry->phone);*/
     return 0;
 }
 
@@ -194,7 +200,7 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     printf("\tEnter last name: ");
     GetString(lastName, sizeof(lastName));
     if (!allowEmpty && lastName[0] == '\0') return NULL;
-    
+
     printf("\tEnter first name: ");
     GetString(firstName, sizeof(firstName));
     if (!allowEmpty && firstName[0] == '\0') return NULL;
