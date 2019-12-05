@@ -6,10 +6,6 @@
 #include "PhonebookEntry.h"
 #include "Query.h"
 
-// TODO: Use:
-// if (field[strlen(field) - 1] == '\n') field[strlen(field) - 1] = '\0';
-// Instead of strtok to remove the newline from fgets inputs.
-
 // Longest commands are DELETE and MODIFY (6 chars + '\0' = 7 chars).
 #define MAX_COMMAND_LENGTH 7
 #define FILE_PATH "C:\\phonebook.txt"
@@ -65,12 +61,20 @@ The following is a list of the allowed commands to run the program:\n\n\
         else if (!_stricmp(command, "DELETE") || !_stricmp(command, "4"))
         {
             char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH];
-            printf("\tYou will be prompted for first name and last name. If multiple records are found, you will be asked to select one.\n");
+            printf("\tYou will be prompted for first and last name. If multiple records are found, you will be asked to select one.\n");
             printf("\t\tEnter last name: ");
             GetString(lastName, sizeof(lastName));
             printf("\t\tEnter first name: ");
             GetString(firstName, sizeof(firstName));
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
+            PhonebookEntries filtered = MultiSearch(pEntry, &entries);
+            if (filtered.actualNumber == 0)
+                printf("No records are found.\n\n");
+            else if (filtered.actualNumber == 1)
+            {
+                DeleteEntry(&entries, filtered.pEntries[0]);
+                printf("Entry is deleted successfully. Current number of records is %d.\n\n", entries.actualNumber);
+            }
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {

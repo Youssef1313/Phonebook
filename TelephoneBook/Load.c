@@ -27,7 +27,8 @@ PhonebookEntries Load(char *fileName)
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), pFile))
     {
-        strtok(line, "\n"); // Remove the \n from the end of the line if exists.
+        int length = strlen(line);
+        if (line[length - 1] == '\n') line[length - 1] = '\0';
         AddEntry(&entries, ParseLine(line));
     }
     fclose(pFile);
@@ -43,9 +44,9 @@ PhonebookEntry *ParseLine(char *line)
     char *email = strtok(NULL, ",");
     char *phone = strtok(NULL, ",");
 
-    short day = atoi(strtok(birthDate, "-"));
-    short month = atoi(strtok(NULL, "-"));
-    short year = atoi(strtok(NULL, "-"));
+    short day = atoi(strtok(birthDate, "-/"));
+    short month = atoi(strtok(NULL, "-/"));
+    short year = atoi(strtok(NULL, "-/"));
     
     return ConstructPhonebookEntry(lastName, firstName, (Date) { day, month, year }, address, email, phone);
 }
