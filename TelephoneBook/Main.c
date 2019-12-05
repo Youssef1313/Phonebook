@@ -5,9 +5,15 @@
 #include "PhonebookEntry.h"
 #include "Query.h"
 
+// TODO: Use:
+// if (field[strlen(field) - 1] == '\n') field[strlen(field) - 1] == '\0';
+// Instead of strtok to remove the newline from fgets inputs.
+
 // Longest commands are DELETE and MODIFY (6 chars + '\0' = 7 chars).
 #define MAX_COMMAND_LENGTH 7
 #define FILE_PATH "C:\\phonebook.txt"
+
+PhonebookEntry *GetEntryFromUser(void);
 
 int main(void)
 {
@@ -46,7 +52,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "ADD\n") || !_stricmp(command, "3\n"))
         {
-
+            AddEntry(&entries, GetEntryFromUser());
         }
         else if (!_stricmp(command, "DELETE") || !_stricmp(command, "4\n"))
         {
@@ -82,4 +88,62 @@ The following is a list of the allowed commands to run the program:\n\n\
     printf("Email: %s\n", entry->email);
     printf("Phone: %s\n", entry->phone);*/
     return 0;
+}
+
+
+PhonebookEntry *GetEntryFromUser(void)
+{
+    char lastName[MAX_NAME_LENGTH];
+    char firstName[MAX_NAME_LENGTH];
+    char address[MAX_ADDRESS_LENGTH];
+    char email[MAX_EMAIL_LENGTH];
+    char phone[MAX_PHONE_LENGTH];
+    char dateString[11]; // 07-03-1999 (10 chars + '\0')
+    // TODO: add validation to all fields.
+    printf("When prompted to any field, leaving it empty will result in add cancellation.\n");
+    printf("\tEnter last name: ");
+    fgets(lastName, sizeof(lastName), stdin);
+    fseek(stdin, 0, SEEK_END);
+    if (strlen(lastName) == 1) return NULL;
+    strtok(lastName, "\n");
+
+    printf("\tEnter first name: ");
+    fgets(firstName, sizeof(firstName), stdin);
+    fseek(stdin, 0, SEEK_END);
+    if (strlen(firstName) == 1) return NULL;
+    strtok(firstName, "\n");
+
+    printf("\tEnter address: ");
+    fgets(address, sizeof(address), stdin);
+    fseek(stdin, 0, SEEK_END);
+    if (strlen(address) == 1) return NULL;
+    strtok(address, "\n");
+
+    printf("\tEnter email: ");
+    fgets(email, sizeof(email), stdin);
+    fseek(stdin, 0, SEEK_END);
+    if (strlen(email) == 1) return NULL;
+    strtok(email, "\n");
+
+    printf("\tEnter phone: ");
+    fgets(phone, sizeof(phone), stdin);
+    fseek(stdin, 0, SEEK_END);
+    if (strlen(phone) == 1) return NULL;
+    strtok(phone, "\n");
+
+    short day, month, year;
+    do
+    {
+        printf("\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy (Leave blank to cancel adding the phonebook entry): ");
+        fgets(dateString, sizeof(dateString), stdin);
+        fseek(stdin, 0, SEEK_END);
+        if (strlen(dateString) == 1) return NULL;
+        strtok(dateString, "\n");
+
+        day = atoi(strtok(dateString, "-/"));
+        month = atoi(strtok(NULL, "-/"));
+        year = atoi(strtok(NULL, "-/"));
+    } while (!day || !month || !year); // TODO: Consider adding `|| !IsValid(day, month, year)` to the condition.
+   
+    return ConstructPhonebookEntry(lastName, firstName, (Date){ day, month, year }, address, email, phone);
 }
