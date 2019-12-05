@@ -1,5 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "Add.h"
 #include "Delete.h"
 #include "Load.h"
@@ -62,10 +65,17 @@ The following is a list of the allowed commands to run the program:\n\n\
         {
             char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH];
             printf("\tYou will be prompted for first and last name. If multiple records are found, you will be asked to select one.\n");
-            printf("\t\tEnter last name: ");
-            GetString(lastName, sizeof(lastName));
-            printf("\t\tEnter first name: ");
-            GetString(firstName, sizeof(firstName));
+            do
+            {
+                printf("\t\tEnter last name: ");
+                GetString(lastName, sizeof(lastName));
+            } while (!*lastName);
+
+            do
+            {
+                printf("\t\tEnter first name: ");
+                GetString(firstName, sizeof(firstName));
+            } while (!*firstName);
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
             if (filtered.actualNumber == 0)
@@ -73,6 +83,21 @@ The following is a list of the allowed commands to run the program:\n\n\
             else if (filtered.actualNumber == 1)
             {
                 DeleteEntry(&entries, filtered.pEntries[0]);
+                printf("Entry is deleted successfully. Current number of records is %d.\n\n", entries.actualNumber);
+            }
+            else
+            {
+                printf("Found multiple results:\n");
+                PrintNumberedEntries(&entries);
+                printf("Enter the number of the record (between 1 and %d) you want to delete: ", filtered.actualNumber);
+                int recordNumber = 0;
+                do
+                {
+                    char numberString[5];
+                    GetString(numberString, sizeof(numberString));
+                    recordNumber = atoi(numberString);
+                } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
+                DeleteEntry(&entries, filtered.pEntries[recordNumber - 1]);
                 printf("Entry is deleted successfully. Current number of records is %d.\n\n", entries.actualNumber);
             }
         }

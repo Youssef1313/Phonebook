@@ -34,3 +34,21 @@ void PrintEntries(PhonebookEntries *pEntries)
         printf("Email: %s, Phone: %s\n\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
     }
 }
+
+void PrintNumberedEntries(PhonebookEntries *pEntries)
+{
+    printf("\n");
+    if (pEntries->actualNumber == 0)
+    {
+        printf("No records are found.\n\n");
+        return;
+    }
+    printf("Printing %d record(s)\n\n", pEntries->actualNumber);
+    for (int i = 0; i < pEntries->actualNumber; i++)
+    {
+        printf("Record number: %d\n", i + 1);
+        printf("First name: %s, Last name: %s\n", pEntries->pEntries[i]->firstName, pEntries->pEntries[i]->lastName);
+        printf("Address: %s\n", pEntries->pEntries[i]->address);
+        printf("Email: %s, Phone: %s\n\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
+    }
+}
