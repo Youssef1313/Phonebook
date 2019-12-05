@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "Add.h"
 #include "Load.h"
 #include "PhonebookEntry.h"
 
@@ -27,16 +28,7 @@ PhonebookEntries Load(char *fileName)
     while (fgets(line, sizeof(line), pFile))
     {
         strtok(line, "\n"); // Remove the \n from the end of the line if exists.
-        // TODO: Consider refactoring this to use the AddEntry method from Add.h
-        if (entries.actualNumber >= entries.allocated)
-        {
-            entries.allocated *= 2;
-            entries.pEntries = realloc(entries.pEntries, sizeof(PhonebookEntry *) * entries.allocated);
-            // TODO: Check if re-allocation failed.
-        }
-        entries.pEntries[entries.actualNumber] = ParseLine(line);
-        entries.actualNumber++;
-       
+        AddEntry(&entries, ParseLine(line));
     }
     fclose(pFile);
     return entries;
