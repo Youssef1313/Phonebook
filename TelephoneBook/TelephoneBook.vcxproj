@@ -131,6 +131,7 @@
     <ClCompile Include="Modify.c" />
     <ClCompile Include="PhonebookEntry.c" />
     <ClCompile Include="Query.c" />
+    <ClCompile Include="Save.c" />
     <ClCompile Include="Validation.c" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="Modify.h" />
     <ClInclude Include="PhonebookEntry.h" />
     <ClInclude Include="Query.h" />
+    <ClInclude Include="Save.h" />
     <ClInclude Include="Validation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

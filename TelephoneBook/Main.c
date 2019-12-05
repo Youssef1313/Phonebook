@@ -8,6 +8,7 @@
 #include "Load.h"
 #include "Modify.h"
 #include "PhonebookEntry.h"
+#include "Save.h"
 #include "Query.h"
 #include "Validation.h"
 
@@ -153,10 +154,12 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
-
+            printf("SORT!\n");
         }
         else if (!_stricmp(command, "SAVE") || !_stricmp(command, "7"))
         {
+            SaveEntries(entries, FILE_PATH);
+            printf("Changes are saved!\n\n");
             unsavedChanges = 0;
         }
         else if (!_stricmp(command, "QUIT") || !_stricmp(command, "8"))
@@ -168,6 +171,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 GetString(confirmation, sizeof(confirmation));
                 if (strcmp(confirmation, "yes")) continue;
             }
+            break;
         }
         else
         {
