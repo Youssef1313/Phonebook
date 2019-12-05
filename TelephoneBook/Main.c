@@ -13,14 +13,14 @@ int main(void)
 {
     printf("Welcome to phonebook program.\n\
 The following is a list of the allowed commands to run the program:\n\n\
-    1. LOAD -> Loads the phonebook from hard disk.\n\
-    2. QUERY -> Search by last name.\n\
-    3. ADD -> Add new entry to phonebook.\n\
+    1. LOAD   -> Loads the phonebook from hard disk.\n\
+    2. QUERY  -> Search by last name.\n\
+    3. ADD    -> Add new entry to phonebook.\n\
     4. DELETE -> Deletes an entry by providing first and last name.\n\
     5. MODIFY -> Modify a record.\n\
-    6. PRINT -> Print the phonebook in sorted order\n\
-    7. SAVE -> Save the changes you made to the hard disk.\n\
-    8. QUIT -> Exit without saving.\n\n");
+    6. PRINT  -> Print the phonebook in sorted order\n\
+    7. SAVE   -> Save the changes you made to the hard disk.\n\
+    8. QUIT   -> Exit without saving.\n\n");
     PhonebookEntries entries = Load(NULL);
 
     while (1)
