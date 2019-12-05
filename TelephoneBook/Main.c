@@ -41,7 +41,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             fgets(lastName, MAX_NAME_LENGTH, stdin);
             fseek(stdin, 0, SEEK_END);
             strtok(lastName, "\n");
-            PhonebookEntries filtered = Search(lastName, entries);
+            PhonebookEntries filtered = Search(lastName, &entries);
             PrintEntries(&filtered);
         }
         else if (!_stricmp(command, "ADD\n") || !_stricmp(command, "3\n"))

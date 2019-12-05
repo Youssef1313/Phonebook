@@ -4,15 +4,15 @@
 #include "Query.h"
 
 // TODO: For later improvment, make the function take an address of entries, and return address of entries.
-PhonebookEntries Search(char *lastName, PhonebookEntries entries)
+PhonebookEntries Search(char *lastName, PhonebookEntries *pEntries)
 {
     PhonebookEntries filteredEntries;
     filteredEntries.actualNumber = 0;
     filteredEntries.allocated = 4;
     filteredEntries.pEntries = malloc(sizeof(PhonebookEntry *) * filteredEntries.allocated);
-    for (int i = 0; i < entries.actualNumber; i++)
+    for (int i = 0; i < pEntries->actualNumber; i++)
     {
-        if (!_stricmp(entries.pEntries[i]->lastName, lastName))
+        if (!_stricmp(pEntries->pEntries[i]->lastName, lastName))
         {
             if (filteredEntries.actualNumber >= filteredEntries.allocated)
             {
@@ -20,7 +20,7 @@ PhonebookEntries Search(char *lastName, PhonebookEntries entries)
                 filteredEntries.pEntries = realloc(filteredEntries.pEntries, sizeof(PhonebookEntry *) * filteredEntries.allocated);
                 // TODO: Check if re-allocation failed.
             }
-            filteredEntries.pEntries[filteredEntries.actualNumber++] = entries.pEntries[i];
+            filteredEntries.pEntries[filteredEntries.actualNumber++] = pEntries->pEntries[i];
         }
     }
     return filteredEntries;
