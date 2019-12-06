@@ -8,7 +8,11 @@ void AddEntry(PhonebookEntries *pEntries, PhonebookEntry *pEntry)
     {
         pEntries->allocated *= 2;
         pEntries->pEntries = realloc(pEntries->pEntries, sizeof(PhonebookEntry *) * pEntries->allocated);
-        // TODO: Check if re-allocation failed.
+        if (!pEntries->pEntries)
+        {
+            printf("Failed to re-allocate memory. Program will exit.\n");
+            exit(-1);
+        }
     }
     pEntries->pEntries[pEntries->actualNumber] = pEntry;
     pEntries->actualNumber++;

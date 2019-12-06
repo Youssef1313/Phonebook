@@ -24,7 +24,11 @@ PhonebookEntries MultiSearch(PhonebookEntry *pEntryToSearchFor, PhonebookEntries
             {
                 filteredEntries.allocated *= 2;
                 filteredEntries.pEntries = realloc(filteredEntries.pEntries, sizeof(PhonebookEntry *) * filteredEntries.allocated);
-                // TODO: Check if re-allocation failed.
+                if (!filteredEntries.pEntries)
+                {
+                    printf("Failed to re-allocate memory. Program will exit.\n");
+                    exit(-1);
+                }
             }
             filteredEntries.pEntries[filteredEntries.actualNumber++] = pEntries->pEntries[i];
         }

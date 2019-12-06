@@ -15,8 +15,12 @@ PhonebookEntries Load(char *fileName)
     entries.actualNumber = 0;
     entries.allocated = 4;
     entries.pEntries = malloc(sizeof(PhonebookEntry *) * entries.allocated);
+    if (!entries.pEntries)
+    {
+        printf("Failed to allocate memory. Program will exit.\n");
+        exit(-1);
+    }
     if (fileName == NULL) return entries;
-    // TODO: Check if allocation failed and take appropriate action.
 
     FILE *pFile = fopen(fileName, "r");
     if (!pFile)
