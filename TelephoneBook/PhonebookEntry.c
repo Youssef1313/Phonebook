@@ -8,7 +8,11 @@
 PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date birthDate, char *address, char *email, char *phone)
 {
     PhonebookEntry *pEntry = malloc(sizeof(PhonebookEntry));
-    // TODO: check if allocation failed.
+    if (!pEntry)
+    {
+        printf("Failed to allocate memory. Program will exit.\n");
+        exit(-1);
+    }
     strcpy(pEntry->lastName, lastName); // TODO: Optimization. Prevent buffer overflow.
     strcpy(pEntry->firstName, firstName); // TODO: Optimization. Prevent buffer overflow.
     pEntry->birthDate = birthDate;
@@ -30,7 +34,7 @@ void PrintEntries(PhonebookEntries *pEntries)
     for (int i = 0; i < pEntries->actualNumber; i++)
     {
         printf("First name: %s, Last name: %s\n", pEntries->pEntries[i]->firstName, pEntries->pEntries[i]->lastName);
-        printf("Address: %s\n", pEntries->pEntries[i]->address);
+        printf("Address: %s, Birthdate: %02d-%02d-%04d\n", pEntries->pEntries[i]->address, pEntries->pEntries[i]->birthDate.day, pEntries->pEntries[i]->birthDate.month, pEntries->pEntries[i]->birthDate.year);
         printf("Email: %s, Phone: %s\n\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
     }
 }
@@ -48,7 +52,7 @@ void PrintNumberedEntries(PhonebookEntries *pEntries)
     {
         printf("Record number: %d\n", i + 1);
         printf("First name: %s, Last name: %s\n", pEntries->pEntries[i]->firstName, pEntries->pEntries[i]->lastName);
-        printf("Address: %s\n", pEntries->pEntries[i]->address);
+        printf("Address: %s, Birthdate: %02d-%02d-%04d\n", pEntries->pEntries[i]->address, pEntries->pEntries[i]->birthDate.day, pEntries->pEntries[i]->birthDate.month, pEntries->pEntries[i]->birthDate.year);
         printf("Email: %s, Phone: %s\n\n", pEntries->pEntries[i]->email, pEntries->pEntries[i]->phone);
     }
 }
