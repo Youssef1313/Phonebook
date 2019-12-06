@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "PhonebookEntry.h"
 #include "Save.h"
@@ -10,6 +11,7 @@ void SaveEntries(PhonebookEntries entries, char *fileName)
     {
         printf("UNABLE TO OPEN FILE FOR WRITING. THE PROGRAM WILL EXIT.\n");
         exit(-1);
+        return; // Useless, but put to silence compile warning.
     }
     for (int i = 0; i < entries.actualNumber; i++)
     {
