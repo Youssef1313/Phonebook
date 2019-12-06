@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "Add.h"
+#include "ComparatorFunctions.h"
 #include "Delete.h"
 #include "Load.h"
 #include "Modify.h"
@@ -25,7 +26,7 @@ int main(void)
     printf("Welcome to phonebook program.\n\
 The following is a list of the allowed commands to run the program:\n\n\
     1. LOAD   -> Loads the phonebook from hard disk.\n\
-    2. QUERY  -> Search by last name.\n\
+    2. QUERY  -> Search by a combination of fields.\n\
     3. ADD    -> Add new entry to phonebook.\n\
     4. DELETE -> Deletes an entry by providing first and last name.\n\
     5. MODIFY -> Modify a record.\n\
@@ -154,7 +155,19 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
-            printf("SORT!\n");
+            char sortBy[2];
+            printf("Enter 'L' to sort by last name, 'B' to sort by 'Birthdate', or otherwise to cancel sorting: ");
+            GetString(sortBy, sizeof(sortBy));
+            if (!_stricmp(sortBy, "L"))
+            {
+                // Sort by last name.
+            }
+            else if (!_stricmp(sortBy, "B"))
+            {
+                qsort(entries.pEntries, entries.actualNumber, sizeof(entries.pEntries[0]), CompareEntriesByDate);
+                PrintEntries(&entries);
+            }
+
         }
         else if (!_stricmp(command, "SAVE") || !_stricmp(command, "7"))
         {
@@ -220,7 +233,7 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     GetString(phone, sizeof(phone));
     if (!allowEmpty && phone[0] == '\0') return NULL;
 
-    Date birthdate;
+    Date birthdate = { 0, 0, 0 };
     while (1)
     {
         printf("\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: ");
