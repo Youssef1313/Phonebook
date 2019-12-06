@@ -5,7 +5,7 @@ int CompareEntriesByDate(const void *p1, const void *p2)
 {
     PhonebookEntry **first = (PhonebookEntry **)p1;
     PhonebookEntry **second = (PhonebookEntry **)p2;
-    return CompareDates((*first)->birthDate, (*first)->birthDate);
+    return CompareDates((*first)->birthDate, (*second)->birthDate);
 }
 
 int CompareDates(Date date1, Date date2)
