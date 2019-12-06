@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Add.h" />
+    <ClInclude Include="ANSI_COLOR_CONSTANTS.h" />
     <ClInclude Include="ComparatorFunctions.h" />
     <ClInclude Include="Delete.h" />
     <ClInclude Include="Load.h" />

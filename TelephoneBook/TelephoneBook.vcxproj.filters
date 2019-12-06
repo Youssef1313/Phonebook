@@ -74,5 +74,8 @@
     <ClInclude Include="ComparatorFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ANSI_COLOR_CONSTANTS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
