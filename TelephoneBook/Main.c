@@ -52,7 +52,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "QUERY") || !_stricmp(command, "2"))
         {
-            printf("When prompted to any field, leaving it empty means it won't be used in searching.\n");
+            printf("\tWhen prompted to any field, leaving it empty means it won't be used in searching.\n");
             PhonebookEntry *pSearchEntry = GetEntryFromUser(true);
             PhonebookEntries filtered = MultiSearch(pSearchEntry, &entries);
             PrintEntries(&filtered);
@@ -60,7 +60,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "ADD") || !_stricmp(command, "3"))
         {
-            printf("When prompted to any field, leaving it empty will result in cancelling adding this record.\n");
+            printf("\tWhen prompted to any field, leaving it empty will result in cancelling adding this record.\n");
             PhonebookEntry *pNewEntry = GetEntryFromUser(false);
             if (pNewEntry)
             {
@@ -129,28 +129,23 @@ The following is a list of the allowed commands to run the program:\n\n\
             free(pEntry);
             if (filtered.actualNumber == 0)
                 printf("No records are found.\n\n");
-            else if (filtered.actualNumber == 1)
-            {
-                printf("You will be prompted for new info, leave any field blank to keep it unchanged.\n");
-                PhonebookEntry *pEntry = GetEntryFromUser(true);
-                ModifyRecord(filtered.pEntries[0], pEntry); // This function will call free on pEntry.
-                unsavedChanges = 1;
-                printf("Field is modified!\n\n");
-            }
             else
             {
-                printf("Found multiple results:\n");
-                PrintNumberedEntries(&filtered);
-                printf("Enter the number of the record (between 1 and %d) you want to modify: ", filtered.actualNumber);
-                int recordNumber = 0;
-                do
+                int recordNumber = 1;
+                if (filtered.actualNumber > 1)
                 {
-                    char numberString[5];
-                    GetString(numberString, sizeof(numberString));
-                    recordNumber = atoi(numberString);
-                } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
+                    printf("Found multiple results:\n");
+                    PrintNumberedEntries(&filtered);
+                    printf("Enter the number of the record (between 1 and %d) you want to modify: ", filtered.actualNumber);
 
-                printf("You will be prompted for new info, leave any field blank to keep it unchanged.\n");
+                    do
+                    {
+                        char numberString[5];
+                        GetString(numberString, sizeof(numberString));
+                        recordNumber = atoi(numberString);
+                    } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
+                }
+                printf("\tYou will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pEntry = GetEntryFromUser(true);
                 ModifyRecord(filtered.pEntries[recordNumber - 1], pEntry); // This function will call free on pEntry.
                 unsavedChanges = 1;
@@ -218,30 +213,30 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     char phone[MAX_PHONE_LENGTH];
     char dateString[11]; // 07-03-1999 (10 chars + '\0')
     // TODO: add validation to all fields.
-    printf("\tEnter last name: ");
+    printf("\t\tEnter last name: ");
     GetString(lastName, sizeof(lastName));
     if (!allowEmpty && lastName[0] == '\0') return NULL;
 
-    printf("\tEnter first name: ");
+    printf("\t\tEnter first name: ");
     GetString(firstName, sizeof(firstName));
     if (!allowEmpty && firstName[0] == '\0') return NULL;
 
-    printf("\tEnter address: ");
+    printf("\t\tEnter address: ");
     GetString(address, sizeof(address));
     if (!allowEmpty && address[0] == '\0') return NULL;
 
-    printf("\tEnter email: ");
+    printf("\t\tEnter email: ");
     GetString(email, sizeof(email));
     if (!allowEmpty && email[0] == '\0') return NULL;
 
-    printf("\tEnter phone: ");
+    printf("\t\tEnter phone: ");
     GetString(phone, sizeof(phone));
     if (!allowEmpty && phone[0] == '\0') return NULL;
 
     Date birthdate = { 0, 0, 0 };
     while (1)
     {
-        printf("\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: ");
+        printf("\t\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: ");
         GetString(dateString, sizeof(dateString));
         if (!allowEmpty && dateString[0] == '\0') return NULL; // Meaning to cancel.
         if (dateString[0] == '\0') break;
