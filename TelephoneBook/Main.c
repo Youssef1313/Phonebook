@@ -16,7 +16,7 @@
 // Longest commands are DELETE and MODIFY (6 chars + '\0' = 7 chars).
 // TODO: When implementing validation, implement separate functions to prompt for each field.
 #define MAX_COMMAND_LENGTH 7
-#define FILE_PATH "C:\\phonebook.txt"
+#define FILE_PATH "D:\\phonebook.txt"
 
 PhonebookEntry *GetEntryFromUser(bool allowEmpty);
 void GetString(char *buffer, int count);
