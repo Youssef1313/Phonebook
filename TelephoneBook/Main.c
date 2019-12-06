@@ -160,7 +160,8 @@ The following is a list of the allowed commands to run the program:\n\n\
             GetString(sortBy, sizeof(sortBy));
             if (!_stricmp(sortBy, "L"))
             {
-                // Sort by last name.
+                qsort(entries.pEntries, entries.actualNumber, sizeof(entries.pEntries[0]), CompareEntriesByLastName);
+                PrintEntries(&entries);
             }
             else if (!_stricmp(sortBy, "B"))
             {
