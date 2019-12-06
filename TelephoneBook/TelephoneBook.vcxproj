@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Add.c" />
+    <ClCompile Include="ComparatorFunctions.c" />
     <ClCompile Include="Delete.c" />
     <ClCompile Include="Load.c" />
     <ClCompile Include="Main.c" />
@@ -136,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Add.h" />
+    <ClInclude Include="ComparatorFunctions.h" />
     <ClInclude Include="Delete.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="Modify.h" />
