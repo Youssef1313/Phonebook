@@ -25,8 +25,9 @@ PhonebookEntries Load(char *fileName)
     FILE *pFile = fopen(fileName, "r");
     if (!pFile)
     {
-        printf("UNABLE TO READ THE FILE. THE PROGRAM WILL EXIT.\n");
-        exit(-1);
+        printf("Unable to read the file. Make sure the file exists, then run the LOAD command again.\n\n");
+        entries.actualNumber = -1;
+        return entries;
     }
     
     char line[MAX_LINE_LENGTH];

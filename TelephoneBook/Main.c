@@ -42,9 +42,13 @@ The following is a list of the allowed commands to run the program:\n\n\
         GetString(command, sizeof(command));
         if (!_stricmp(command, "LOAD") || !_stricmp(command, "1"))
         {
-            entries = Load(FILE_PATH);
-            unsavedChanges = 0;
-            printf("File is loaded successfully. It has %d record(s).\n\n", entries.actualNumber);
+            PhonebookEntries tempEntries = Load(FILE_PATH);
+            if (tempEntries.actualNumber >= 0) // Load returns -1 if reading the file has failed.
+            {
+                entries = tempEntries;
+                unsavedChanges = 0;
+                printf("File is loaded successfully. It has %d record(s).\n\n", entries.actualNumber);
+            }
         }
         else if (!_stricmp(command, "QUERY") || !_stricmp(command, "2"))
         {
