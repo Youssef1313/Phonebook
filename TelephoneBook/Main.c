@@ -20,7 +20,7 @@
 #define FILE_PATH "D:\\phonebook.txt"
 
 PhonebookEntry *GetEntryFromUser(bool allowEmpty);
-void GetString(char *buffer, int count);
+void GetString(char *prompt, char *buffer, int count);
 
 int main(void)
 {
@@ -39,8 +39,7 @@ The following is a list of the allowed commands to run the program:\n\n\
     while (1)
     {
         char command[MAX_COMMAND_LENGTH];
-        printf(ANSI_COLOR_YELLOW"Enter a command: "ANSI_COLOR_RESET);
-        GetString(command, sizeof(command));
+        GetString(ANSI_COLOR_YELLOW"Enter a command: "ANSI_COLOR_RESET, command, sizeof(command));
         if (!_stricmp(command, "LOAD") || !_stricmp(command, "1"))
         {
             PhonebookEntries tempEntries = Load(FILE_PATH);
@@ -78,14 +77,12 @@ The following is a list of the allowed commands to run the program:\n\n\
             printf("\tYou will be prompted for first and last name. If multiple records are found, you will be asked to select one.\n");
             do
             {
-                printf(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET);
-                GetString(lastName, sizeof(lastName));
+                GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
             } while (!*lastName);
 
             do
             {
-                printf(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET);
-                GetString(firstName, sizeof(firstName));
+                GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
             } while (!*firstName);
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
@@ -101,12 +98,12 @@ The following is a list of the allowed commands to run the program:\n\n\
             {
                 printf(ANSI_COLOR_BLUE"Found multiple results:\n"ANSI_COLOR_RESET);
                 PrintNumberedEntries(&filtered);
-                printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to delete: "ANSI_COLOR_RESET, filtered.actualNumber);
                 int recordNumber = 0;
                 do
                 {
+                    printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to delete: "ANSI_COLOR_RESET, filtered.actualNumber);
                     char numberString[5];
-                    GetString(numberString, sizeof(numberString));
+                    GetString("", numberString, sizeof(numberString));
                     recordNumber = atoi(numberString);
                 } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
                 DeleteEntry(&entries, filtered.pEntries[recordNumber - 1]);
@@ -120,8 +117,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             printf("\tYou will be prompted for last name. If multiple records are found, you will be asked to select one.\n");
             do
             {
-                printf(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET);
-                GetString(lastName, sizeof(lastName));
+                GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
             } while (!*lastName);
 
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
@@ -136,12 +132,11 @@ The following is a list of the allowed commands to run the program:\n\n\
                 {
                     printf("Found multiple results:\n");
                     PrintNumberedEntries(&filtered);
-                    printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to modify: "ANSI_COLOR_RESET, filtered.actualNumber);
-
                     do
                     {
+                        printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to modify: "ANSI_COLOR_RESET, filtered.actualNumber);
                         char numberString[5];
-                        GetString(numberString, sizeof(numberString));
+                        GetString("", numberString, sizeof(numberString));
                         recordNumber = atoi(numberString);
                     } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
                 }
@@ -155,8 +150,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
             char sortBy[2];
-            printf(ANSI_COLOR_YELLOW"Enter 'L' to sort by last name, 'B' to sort by 'Birthdate', or otherwise to cancel sorting: "ANSI_COLOR_RESET);
-            GetString(sortBy, sizeof(sortBy));
+            GetString(ANSI_COLOR_YELLOW"Enter 'L' to sort by last name, 'B' to sort by 'Birthdate', or otherwise to cancel sorting: "ANSI_COLOR_RESET, sortBy, sizeof(sortBy));
             if (!_stricmp(sortBy, "L"))
             {
                 qsort(entries.pEntries, entries.actualNumber, sizeof(entries.pEntries[0]), CompareEntriesByLastName);
@@ -180,8 +174,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             if (unsavedChanges)
             {
                 char confirmation[4];
-                printf(ANSI_COLOR_RED"WARNING: There is unsaved changes. Enter 'yes' to confirm quitting: "ANSI_COLOR_RESET);
-                GetString(confirmation, sizeof(confirmation));
+                GetString(ANSI_COLOR_RED"WARNING: There is unsaved changes. Enter 'yes' to confirm quitting: "ANSI_COLOR_RESET, confirmation, sizeof(confirmation));
                 if (strcmp(confirmation, "yes")) continue;
                 printf("\n");
             }
@@ -196,12 +189,19 @@ The following is a list of the allowed commands to run the program:\n\n\
     return 0;
 }
 
-void GetString(char *buffer, int count)
+void GetString(char *prompt, char *buffer, int count)
 {
-    fgets(buffer, count, stdin);
-    fseek(stdin, 0, SEEK_END);
-    int length = strlen(buffer);
-    if (buffer[length - 1] == '\n') buffer[length - 1] = '\0';
+    bool firstTime = true;
+    printf(prompt);
+    do
+    {
+        if (!firstTime) printf(ANSI_COLOR_RED"Commas not allowed. Re-enter: "ANSI_COLOR_RESET);
+        fgets(buffer, count, stdin);
+        fseek(stdin, 0, SEEK_END);
+        int length = strlen(buffer);
+        if (buffer[length - 1] == '\n') buffer[length - 1] = '\0';
+        firstTime = false;
+    } while (StringContains(buffer, ','));
 }
 
 
@@ -214,31 +214,26 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     char phone[MAX_PHONE_LENGTH];
     char dateString[11]; // 07-03-1999 (10 chars + '\0')
     // TODO: add validation to all fields.
-    printf(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET);
-    GetString(lastName, sizeof(lastName));
+
+    GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
     if (!allowEmpty && lastName[0] == '\0') return NULL;
 
-    printf(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET);
-    GetString(firstName, sizeof(firstName));
+    GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
     if (!allowEmpty && firstName[0] == '\0') return NULL;
 
-    printf(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET);
-    GetString(address, sizeof(address));
+    GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
     if (!allowEmpty && address[0] == '\0') return NULL;
 
-    printf(ANSI_COLOR_YELLOW"\t\tEnter email: "ANSI_COLOR_RESET);
-    GetString(email, sizeof(email));
+    GetString(ANSI_COLOR_YELLOW"\t\tEnter email: "ANSI_COLOR_RESET, email, sizeof(email));
     if (!allowEmpty && email[0] == '\0') return NULL;
 
-    printf(ANSI_COLOR_YELLOW"\t\tEnter phone: "ANSI_COLOR_RESET);
-    GetString(phone, sizeof(phone));
+    GetString(ANSI_COLOR_YELLOW"\t\tEnter phone: "ANSI_COLOR_RESET, phone, sizeof(phone));
     if (!allowEmpty && phone[0] == '\0') return NULL;
 
     Date birthdate = { 0, 0, 0 };
     while (1)
     {
-        printf(ANSI_COLOR_YELLOW"\t\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: "ANSI_COLOR_RESET);
-        GetString(dateString, sizeof(dateString));
+        GetString(ANSI_COLOR_YELLOW"\t\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: "ANSI_COLOR_RESET, dateString, sizeof(dateString));
         if (!allowEmpty && dateString[0] == '\0') return NULL; // Meaning to cancel.
         if (dateString[0] == '\0') break;
         if (IsValidDate(dateString, &birthdate)) break;

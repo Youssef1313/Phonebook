@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "PhonebookEntry.h"
+#include "Validation.h"
 
 bool IsValidDate(char *dateString, Date *date)
 {
@@ -19,5 +20,13 @@ bool IsValidDate(char *dateString, Date *date)
     date->year = atoi(tok);
 
     return !strtok(NULL, "-/");
+}
 
+bool StringContains(char *s, char c)
+{
+    for (int i = 0, n = strlen(s); i < n; i++)
+    {
+        if (s[i] == c) return true;
+    }
+    return false;
 }

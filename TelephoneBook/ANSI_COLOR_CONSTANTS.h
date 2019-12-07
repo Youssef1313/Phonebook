@@ -2,7 +2,6 @@
 
 // Credits: https://stackoverflow.com/questions/3219393/ (ANSI escape codes doesn't work for all terminals).
 // To enable it in windows cmd, run  `REG ADD HKCU\CONSOLE /f /v VirtualTerminalLevel /t REG_DWORD /d 1` (https://stackoverflow.com/questions/16755142/).
-//
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"

@@ -4,3 +4,4 @@
 #include "PhonebookEntry.h"
 
 bool IsValidDate(char *dateString, Date *date);
+bool StringContains(char *s, char c);
