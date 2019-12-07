@@ -12,7 +12,7 @@ PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date bi
     PhonebookEntry *pEntry = malloc(sizeof(PhonebookEntry));
     if (!pEntry)
     {
-        printf("Failed to allocate memory. Program will exit.\n");
+        printf(ANSI_COLOR_RED"Failed to allocate memory. Program will exit.\n"ANSI_COLOR_RESET);
         exit(-1);
     }
     strcpy(pEntry->lastName, lastName); // TODO: Optimization. Prevent buffer overflow.
@@ -29,7 +29,7 @@ void PrintEntries(PhonebookEntries *pEntries)
     printf("\n");
     if (pEntries->actualNumber == 0)
     {
-        printf("No records are found.\n\n");
+        printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
         return;
     }
     printf(ANSI_COLOR_BLUE"Printing %d record(s)\n\n"ANSI_COLOR_RESET, pEntries->actualNumber);

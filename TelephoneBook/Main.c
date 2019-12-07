@@ -128,7 +128,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
             free(pEntry);
             if (filtered.actualNumber == 0)
-                printf("No records are found.\n\n");
+                printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
             else
             {
                 int recordNumber = 1;
@@ -180,9 +180,10 @@ The following is a list of the allowed commands to run the program:\n\n\
             if (unsavedChanges)
             {
                 char confirmation[4];
-                printf(ANSI_COLOR_BLUE"WARNING: There is unsaved changes. Enter 'yes' to confirm quitting: "ANSI_COLOR_RESET);
+                printf(ANSI_COLOR_RED"WARNING: There is unsaved changes. Enter 'yes' to confirm quitting: "ANSI_COLOR_RESET);
                 GetString(confirmation, sizeof(confirmation));
                 if (strcmp(confirmation, "yes")) continue;
+                printf("\n");
             }
             break;
         }
