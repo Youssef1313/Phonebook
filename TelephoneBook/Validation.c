@@ -19,8 +19,33 @@ bool IsValidDate(char *dateString, Date *date)
     if (!tok) return false;
     date->year = atoi(tok);
 
-    return !strtok(NULL, "-/");
+    if (!strtok(NULL, "-/"))
+    {
+        if (date->year < 1500 || date->year > 3000)
+            return false;
+
+        if (date->month == 1 || date->month == 3 || date->month == 5 || date->month == 7 || date->month == 8 || date->month == 10 || date->month == 12)
+            return date->day >= 1 && date->day <= 31;
+
+        if (date->month == 4 || date->month == 6 || date->month == 9 || date->month == 11)
+            return date->day >= 1 && date->day <= 31;
+
+        if (date->month == 2 && IsLeapYear(date->year))
+            return date->day >= 1 && date->day <= 29;
+
+        if (date->month == 2 && !IsLeapYear(date->year))
+            return date->day >= 1 && date->day <= 28;
+
+    }
+
+    return false;
 }
+
+bool IsLeapYear(short year)
+{
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+}
+
 
 bool StringContains(char *s, char c)
 {
