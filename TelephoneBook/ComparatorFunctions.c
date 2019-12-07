@@ -1,7 +1,7 @@
 #include <string.h>
 
-#include "PhonebookEntry.h"
 #include "ComparatorFunctions.h"
+#include "PhonebookEntry.h"
 
 int CompareEntriesByDate(const void *p1, const void *p2)
 {
