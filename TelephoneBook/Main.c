@@ -86,6 +86,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             } while (!*firstName);
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
+            free(pEntry);
             if (filtered.actualNumber == 0)
                 printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
             else
@@ -105,8 +106,10 @@ The following is a list of the allowed commands to run the program:\n\n\
                 }
                 
                 DeleteEntry(&entries, filtered.pEntries[recordNumber - 1]);
+                free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
                 unsavedChanges = 1;
                 printf(ANSI_COLOR_GREEN"Entry is deleted successfully. Current number of records is %d.\n\n"ANSI_COLOR_RESET, entries.actualNumber);
+
             }
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
@@ -141,6 +144,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf("\tYou will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pEntry = GetEntryFromUser(true);
                 ModifyRecord(filtered.pEntries[recordNumber - 1], pEntry); // This function will call free on pEntry.
+                free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
                 unsavedChanges = 1;
                 printf(ANSI_COLOR_GREEN"Field is modified!\n\n"ANSI_COLOR_RESET);
             }
