@@ -55,7 +55,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             printf("\tWhen prompted to any field, leaving it empty means it won't be used in searching.\n");
             PhonebookEntry *pSearchEntry = GetEntryFromUser(true);
             PhonebookEntries filtered = MultiSearch(pSearchEntry, &entries);
-            PrintEntries(&filtered);
+            PrintEntries(&filtered, false);
             free(pSearchEntry);
         }
         else if (!_stricmp(command, "ADD") || !_stricmp(command, "3"))
@@ -97,7 +97,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             else
             {
                 printf(ANSI_COLOR_BLUE"Found multiple results:\n"ANSI_COLOR_RESET);
-                PrintNumberedEntries(&filtered);
+                PrintEntries(&filtered, true);
                 int recordNumber = 0;
                 do
                 {
@@ -131,7 +131,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 if (filtered.actualNumber > 1)
                 {
                     printf("Found multiple results:\n");
-                    PrintNumberedEntries(&filtered);
+                    PrintEntries(&filtered, true);
                     do
                     {
                         printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to modify: "ANSI_COLOR_RESET, filtered.actualNumber);
@@ -154,12 +154,12 @@ The following is a list of the allowed commands to run the program:\n\n\
             if (!_stricmp(sortBy, "L"))
             {
                 qsort(entries.pEntries, entries.actualNumber, sizeof(entries.pEntries[0]), CompareEntriesByLastName);
-                PrintEntries(&entries);
+                PrintEntries(&entries, false);
             }
             else if (!_stricmp(sortBy, "B"))
             {
                 qsort(entries.pEntries, entries.actualNumber, sizeof(entries.pEntries[0]), CompareEntriesByDate);
-                PrintEntries(&entries);
+                PrintEntries(&entries, false);
             }
 
         }
