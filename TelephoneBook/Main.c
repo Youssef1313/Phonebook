@@ -88,24 +88,22 @@ The following is a list of the allowed commands to run the program:\n\n\
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
             if (filtered.actualNumber == 0)
                 printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
-            else if (filtered.actualNumber == 1)
-            {
-                DeleteEntry(&entries, filtered.pEntries[0]);
-                unsavedChanges = 1;
-                printf(ANSI_COLOR_GREEN"Entry is deleted successfully. Current number of records is %d.\n\n"ANSI_COLOR_RESET, entries.actualNumber);
-            }
             else
             {
-                printf(ANSI_COLOR_BLUE"Found multiple results:\n"ANSI_COLOR_RESET);
-                PrintEntries(&filtered, true);
-                int recordNumber = 0;
-                do
+                int recordNumber = 1;
+                if (filtered.actualNumber > 1)
                 {
-                    printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to delete: "ANSI_COLOR_RESET, filtered.actualNumber);
-                    char numberString[5];
-                    GetString("", numberString, sizeof(numberString));
-                    recordNumber = atoi(numberString);
-                } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
+                    printf(ANSI_COLOR_BLUE"Found multiple results:\n"ANSI_COLOR_RESET);
+                    PrintEntries(&filtered, true);
+                    do
+                    {
+                        printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to delete: "ANSI_COLOR_RESET, filtered.actualNumber);
+                        char numberString[5];
+                        GetString("", numberString, sizeof(numberString));
+                        recordNumber = atoi(numberString);
+                    } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
+                }
+                
                 DeleteEntry(&entries, filtered.pEntries[recordNumber - 1]);
                 unsavedChanges = 1;
                 printf(ANSI_COLOR_GREEN"Entry is deleted successfully. Current number of records is %d.\n\n"ANSI_COLOR_RESET, entries.actualNumber);
