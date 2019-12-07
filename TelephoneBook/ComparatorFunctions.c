@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "PhonebookEntry.h"
 #include "ComparatorFunctions.h"
 
@@ -12,7 +14,7 @@ int CompareEntriesByLastName(const void *p1, const void *p2)
 {
     PhonebookEntry **first = (PhonebookEntry **)p1;
     PhonebookEntry **second = (PhonebookEntry **)p2;
-    return strcmp((*first)->lastName, (*second)->lastName);
+    return _stricmp((*first)->lastName, (*second)->lastName);
 }
 
 int CompareDates(Date date1, Date date2)
