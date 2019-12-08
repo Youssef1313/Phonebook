@@ -21,6 +21,7 @@
 
 PhonebookEntry *GetEntryFromUser(bool allowEmpty);
 void GetString(char *prompt, char *buffer, int count);
+PhonebookEntry *SelectEntry(PhonebookEntries *pEntries);
 
 int main(void)
 {
@@ -87,30 +88,16 @@ The following is a list of the allowed commands to run the program:\n\n\
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
             PhonebookEntries filtered = MultiSearch(pEntry, &entries);
             free(pEntry);
+
             if (filtered.actualNumber == 0)
                 printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
             else
             {
-                int recordNumber = 1;
-                if (filtered.actualNumber > 1)
-                {
-                    printf(ANSI_COLOR_BLUE"Found multiple results:\n"ANSI_COLOR_RESET);
-                    PrintEntries(&filtered, true);
-                    do
-                    {
-                        printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to delete: "ANSI_COLOR_RESET, filtered.actualNumber);
-                        char numberString[5];
-                        GetString("", numberString, sizeof(numberString));
-                        recordNumber = atoi(numberString);
-                    } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
-                }
-                
-                DeleteEntry(&entries, filtered.pEntries[recordNumber - 1]);
-                free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
+                DeleteEntry(&entries, SelectEntry(&filtered));
                 unsavedChanges = 1;
                 printf(ANSI_COLOR_GREEN"Entry is deleted successfully. Current number of records is %d.\n\n"ANSI_COLOR_RESET, entries.actualNumber);
-
             }
+            free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {
@@ -128,26 +115,14 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
             else
             {
-                int recordNumber = 1;
-                if (filtered.actualNumber > 1)
-                {
-                    printf("Found multiple results:\n");
-                    PrintEntries(&filtered, true);
-                    do
-                    {
-                        printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to modify: "ANSI_COLOR_RESET, filtered.actualNumber);
-                        char numberString[5];
-                        GetString("", numberString, sizeof(numberString));
-                        recordNumber = atoi(numberString);
-                    } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
-                }
+                PhonebookEntry *pEntryToModify = SelectEntry(&filtered);
                 printf("\tYou will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pNewEntry = GetEntryFromUser(true);
-                ModifyRecord(filtered.pEntries[recordNumber - 1], pNewEntry); // This function will call free on pNewEntry.
-                free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
+                ModifyRecord(pEntryToModify, pNewEntry); // This function will call free on pNewEntry.
                 unsavedChanges = 1;
                 printf(ANSI_COLOR_GREEN"Field is modified!\n\n"ANSI_COLOR_RESET);
             }
+            free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
         }
         else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
@@ -206,6 +181,23 @@ void GetString(char *prompt, char *buffer, int count)
     } while (StringContains(buffer, ','));
 }
 
+PhonebookEntry *SelectEntry(PhonebookEntries *pEntries)
+{
+    int recordNumber = 1;
+    if (pEntries->actualNumber > 1)
+    {
+        printf(ANSI_COLOR_BLUE"Found multiple results:\n"ANSI_COLOR_RESET);
+        PrintEntries(pEntries, true);
+        do
+        {
+            printf(ANSI_COLOR_YELLOW"Enter the number of the record (between 1 and %d) you want to delete: "ANSI_COLOR_RESET, pEntries->actualNumber);
+            char numberString[5];
+            GetString("", numberString, sizeof(numberString));
+            recordNumber = atoi(numberString);
+        } while (recordNumber < 1 || recordNumber > pEntries->actualNumber);
+    }
+    return pEntries->pEntries[recordNumber - 1];
+}
 
 PhonebookEntry *GetEntryFromUser(bool allowEmpty)
 {
