@@ -36,7 +36,7 @@ The following is a list of the allowed commands to run the program:\n\n\
     7. SAVE   -> Save the changes you made to the hard disk.\n\
     8. QUIT   -> Exit without saving.\n\n"ANSI_COLOR_RESET);
     PhonebookEntries entries = Load(NULL);
-    int unsavedChanges = 0;
+    bool unsavedChanges = false;
     while (1)
     {
         char command[MAX_COMMAND_LENGTH];
@@ -47,15 +47,17 @@ The following is a list of the allowed commands to run the program:\n\n\
             if (tempEntries.actualNumber >= 0) // Load returns -1 if reading the file has failed.
             {
                 entries = tempEntries;
-                unsavedChanges = 0;
+                unsavedChanges = false;
                 printf(ANSI_COLOR_GREEN"File is loaded successfully. It has %d record(s).\n\n"ANSI_COLOR_RESET, entries.actualNumber);
             }
+            else
+                printf(ANSI_COLOR_RED"Unable to read the file. Make sure the file exists, then run the LOAD command again.\n\n"ANSI_COLOR_RESET);
         }
         else if (!_stricmp(command, "QUERY") || !_stricmp(command, "2"))
         {
             printf("\tWhen prompted to any field, leaving it empty means it won't be used in searching.\n");
             PhonebookEntry *pSearchEntry = GetEntryFromUser(true);
-            PhonebookEntries filtered = MultiSearch(pSearchEntry, &entries);
+            PhonebookEntries filtered = Search(pSearchEntry, &entries);
             PrintEntries(&filtered, false);
             free(pSearchEntry);
         }
@@ -66,7 +68,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             if (pNewEntry)
             {
                 AddEntry(&entries, pNewEntry);
-                unsavedChanges = 1;
+                unsavedChanges = true;
                 printf(ANSI_COLOR_GREEN"Record is added.\n\n"ANSI_COLOR_RESET);
             }
             else
@@ -86,7 +88,7 @@ The following is a list of the allowed commands to run the program:\n\n\
                 GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
             } while (!*firstName);
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
-            PhonebookEntries filtered = MultiSearch(pEntry, &entries);
+            PhonebookEntries filtered = Search(pEntry, &entries);
             free(pEntry);
 
             if (filtered.actualNumber == 0)
@@ -94,10 +96,10 @@ The following is a list of the allowed commands to run the program:\n\n\
             else
             {
                 DeleteEntry(&entries, SelectEntry(&filtered));
-                unsavedChanges = 1;
+                unsavedChanges = true;
                 printf(ANSI_COLOR_GREEN"Entry is deleted successfully. Current number of records is %d.\n\n"ANSI_COLOR_RESET, entries.actualNumber);
             }
-            free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
+            free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in Search.
         }
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {
@@ -109,7 +111,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             } while (!*lastName);
 
             PhonebookEntry *pEntryForSearch = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
-            PhonebookEntries filtered = MultiSearch(pEntryForSearch, &entries);
+            PhonebookEntries filtered = Search(pEntryForSearch, &entries);
             free(pEntryForSearch);
             if (filtered.actualNumber == 0)
                 printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
@@ -119,10 +121,10 @@ The following is a list of the allowed commands to run the program:\n\n\
                 printf("\tYou will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pNewEntry = GetEntryFromUser(true);
                 ModifyRecord(pEntryToModify, pNewEntry); // This function will call free on pNewEntry.
-                unsavedChanges = 1;
+                unsavedChanges = true;
                 printf(ANSI_COLOR_GREEN"Field is modified!\n\n"ANSI_COLOR_RESET);
             }
-            free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
+            free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in Search.
         }
         else if (!_stricmp(command, "PRINT") || !_stricmp(command, "6"))
         {
@@ -144,7 +146,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         {
             SaveEntries(entries, FILE_PATH);
             printf(ANSI_COLOR_GREEN"Changes are saved!\n\n"ANSI_COLOR_RESET);
-            unsavedChanges = 0;
+            unsavedChanges = false;
         }
         else if (!_stricmp(command, "QUIT") || !_stricmp(command, "8"))
         {
@@ -218,14 +220,20 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
     if (!allowEmpty && address[0] == '\0') return NULL;
 
-    GetString(ANSI_COLOR_YELLOW"\t\tEnter email: "ANSI_COLOR_RESET, email, sizeof(email));
-    if (!allowEmpty && email[0] == '\0') return NULL;
+    while (true)
+    {
+        GetString(ANSI_COLOR_YELLOW"\t\tEnter email: "ANSI_COLOR_RESET, email, sizeof(email));
+        if (!allowEmpty && email[0] == '\0') return NULL;
+        if (email[0] == '\0') break;
+        if (IsValidEmail(email)) break;
+    }
+
 
     GetString(ANSI_COLOR_YELLOW"\t\tEnter phone: "ANSI_COLOR_RESET, phone, sizeof(phone));
     if (!allowEmpty && phone[0] == '\0') return NULL;
 
     Date birthdate = { 0, 0, 0 };
-    while (1)
+    while (true)
     {
         GetString(ANSI_COLOR_YELLOW"\t\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: "ANSI_COLOR_RESET, dateString, sizeof(dateString));
         if (!allowEmpty && dateString[0] == '\0') return NULL; // Meaning to cancel.

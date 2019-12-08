@@ -2,4 +2,4 @@
 
 #include "PhonebookEntry.h"
 
-PhonebookEntries MultiSearch(PhonebookEntry *pEntryToSearchFor, PhonebookEntries *pEntries);
+PhonebookEntries Search(PhonebookEntry *pEntryToSearchFor, PhonebookEntries *pEntries);

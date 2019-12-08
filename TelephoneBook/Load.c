@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ANSI_COLOR_CONSTANTS.h"
 #include "Add.h"
 #include "Load.h"
 #include "PhonebookEntry.h"
@@ -16,7 +17,7 @@ PhonebookEntries Load(char *fileName)
     entries.pEntries = malloc(sizeof(PhonebookEntry *) * entries.allocated);
     if (!entries.pEntries)
     {
-        printf("Failed to allocate memory. Program will exit.\n");
+        printf(ANSI_COLOR_RED"Failed to allocate memory. Program will exit.\n"ANSI_COLOR_RESET);
         exit(-1);
     }
     if (fileName == NULL) return entries;
@@ -24,7 +25,6 @@ PhonebookEntries Load(char *fileName)
     FILE *pFile = fopen(fileName, "r");
     if (!pFile)
     {
-        printf("Unable to read the file. Make sure the file exists, then run the LOAD command again.\n\n");
         entries.actualNumber = -1;
         return entries;
     }

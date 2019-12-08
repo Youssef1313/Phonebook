@@ -6,6 +6,33 @@
 #include "PhonebookEntry.h"
 #include "Validation.h"
 
+bool IsValidEmail(char *email)
+{
+    int countAtSign = 0;
+    int lastAtIndex;
+
+    int countDotSign = 0;
+    int lastDotIndex;
+
+    int length = strlen(email);
+    for (int i = 0; i < length; i++)
+    {
+        if (email[i] == '@')
+        {
+            countAtSign++;
+            lastAtIndex = i;
+        }
+        else if (email[i] == '.')
+        {
+            countDotSign++;
+            lastDotIndex = i;
+        }
+    }
+    return (countAtSign == 1 && lastAtIndex != 0 && countDotSign >= 1 &&
+        lastDotIndex - lastAtIndex >= 2 &&
+        length - lastDotIndex >= 2);
+}
+
 bool IsValidDate(char *dateString, Date *date)
 {
     char *tok = strtok(dateString, "-/");

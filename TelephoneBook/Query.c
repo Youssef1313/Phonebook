@@ -6,7 +6,7 @@
 #include "PhonebookEntry.h"
 #include "Query.h"
 
-PhonebookEntries MultiSearch(PhonebookEntry *pEntryToSearchFor, PhonebookEntries *pEntries)
+PhonebookEntries Search(PhonebookEntry *pEntryToSearchFor, PhonebookEntries *pEntries)
 {
     PhonebookEntries filteredEntries;
     filteredEntries.actualNumber = 0;
