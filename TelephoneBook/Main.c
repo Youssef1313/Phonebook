@@ -121,9 +121,9 @@ The following is a list of the allowed commands to run the program:\n\n\
                 GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
             } while (!*lastName);
 
-            PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
-            PhonebookEntries filtered = MultiSearch(pEntry, &entries);
-            free(pEntry);
+            PhonebookEntry *pEntryForSearch = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
+            PhonebookEntries filtered = MultiSearch(pEntryForSearch, &entries);
+            free(pEntryForSearch);
             if (filtered.actualNumber == 0)
                 printf(ANSI_COLOR_RED"No records are found.\n\n"ANSI_COLOR_RESET);
             else
@@ -142,8 +142,8 @@ The following is a list of the allowed commands to run the program:\n\n\
                     } while (recordNumber < 1 || recordNumber > filtered.actualNumber);
                 }
                 printf("\tYou will be prompted for new info, leave any field blank to keep it unchanged.\n");
-                PhonebookEntry *pEntry = GetEntryFromUser(true);
-                ModifyRecord(filtered.pEntries[recordNumber - 1], pEntry); // This function will call free on pEntry.
+                PhonebookEntry *pNewEntry = GetEntryFromUser(true);
+                ModifyRecord(filtered.pEntries[recordNumber - 1], pNewEntry); // This function will call free on pNewEntry.
                 free(filtered.pEntries); // Ignore the compile-warning, the memory is initialized in MultiSearch.
                 unsavedChanges = 1;
                 printf(ANSI_COLOR_GREEN"Field is modified!\n\n"ANSI_COLOR_RESET);
