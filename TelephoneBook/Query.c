@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ANSI_COLOR_CONSTANTS.h"
 #include "PhonebookEntry.h"
 #include "Query.h"
 
@@ -11,6 +12,11 @@ PhonebookEntries MultiSearch(PhonebookEntry *pEntryToSearchFor, PhonebookEntries
     filteredEntries.actualNumber = 0;
     filteredEntries.allocated = 4;
     filteredEntries.pEntries = malloc(sizeof(PhonebookEntry *) * filteredEntries.allocated);
+    if (!filteredEntries.pEntries)
+    {
+        printf(ANSI_COLOR_RED"Failed to allocate memory. Program will exit now.\n"ANSI_COLOR_RESET);
+        exit(-1);
+    }
     for (int i = 0; i < pEntries->actualNumber; i++)
     {
         if (
@@ -28,7 +34,7 @@ PhonebookEntries MultiSearch(PhonebookEntry *pEntryToSearchFor, PhonebookEntries
                 PhonebookEntry **pTemp = realloc(filteredEntries.pEntries, sizeof(PhonebookEntry *) * filteredEntries.allocated);
                 if (!pTemp)
                 {
-                    printf("Failed to re-allocate memory. Program will exit.\n");
+                    printf(ANSI_COLOR_RED"Failed to re-allocate memory. Program will exit.\n"ANSI_COLOR_RESET);
                     exit(-1);
                 }
                 filteredEntries.pEntries = pTemp;
