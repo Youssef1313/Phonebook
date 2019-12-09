@@ -16,9 +16,7 @@ void AddEntry(PhonebookEntries *pEntries, PhonebookEntry *pEntry)
             exit(-1);
         }
         pEntries->pEntries = pTemp;
-
     }
     pEntries->pEntries[pEntries->actualNumber] = pEntry;
     pEntries->actualNumber++;
-
 }
