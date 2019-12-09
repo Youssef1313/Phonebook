@@ -217,13 +217,9 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
     if (!allowEmpty && firstName[0] == '\0') return NULL;
 
-    while (true)
-    {
-        GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
-        if (!allowEmpty && address[0] == '\0') return NULL;
-        if (address[0] == '\0') break;
-        if (IsValidPhone(email)) break;
-    }
+
+    GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
+    if (!allowEmpty && address[0] == '\0') return NULL;
 
 
     while (true)
@@ -234,9 +230,14 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
         if (IsValidEmail(email)) break;
     }
 
+    while (true)
+    {
+        GetString(ANSI_COLOR_YELLOW"\t\tEnter phone: "ANSI_COLOR_RESET, phone, sizeof(phone));
+        if (!allowEmpty && phone[0] == '\0') return NULL;
+        if (phone[0] == '\0') break;
+        if (IsValidPhone(phone)) break;
+    }
 
-    GetString(ANSI_COLOR_YELLOW"\t\tEnter phone: "ANSI_COLOR_RESET, phone, sizeof(phone));
-    if (!allowEmpty && phone[0] == '\0') return NULL;
 
     Date birthdate = { 0, 0, 0 };
     while (true)
