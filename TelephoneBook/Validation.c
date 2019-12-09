@@ -33,6 +33,15 @@ bool IsValidEmail(char *email)
         length - lastDotIndex >= 2);
 }
 
+bool IsValidPhone(char *phone)
+{
+    for (int i = 0, n = strlen(phone); i < n; i++)
+    {
+        if (phone[i] < '0' || phone[i] > '9') return false;
+    }
+    return true;
+}
+
 bool IsValidDate(char *dateString, Date *date)
 {
     char *tok = strtok(dateString, "-/");

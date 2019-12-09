@@ -217,8 +217,14 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
     if (!allowEmpty && firstName[0] == '\0') return NULL;
 
-    GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
-    if (!allowEmpty && address[0] == '\0') return NULL;
+    while (true)
+    {
+        GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
+        if (!allowEmpty && address[0] == '\0') return NULL;
+        if (address[0] == '\0') break;
+        if (IsValidPhone(email)) break;
+    }
+
 
     while (true)
     {
