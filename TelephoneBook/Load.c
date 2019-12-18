@@ -6,6 +6,7 @@
 #include "Add.h"
 #include "Load.h"
 #include "PhonebookEntry.h"
+#include "Validation.h"
 
 #define MAX_LINE_LENGTH (2 * MAX_NAME_LENGTH + MAX_ADDRESS_LENGTH + MAX_EMAIL_LENGTH + MAX_PHONE_LENGTH + 16) // 16 is for: 5 commas, 1 '\n', and  for birthdate (e.g. 07-03-1999).
 
@@ -34,24 +35,38 @@ PhonebookEntries Load(char *fileName)
     {
         int length = strlen(line);
         if (line[length - 1] == '\n') line[length - 1] = '\0';
-        AddEntry(&entries, ParseLine(line));
+        PhonebookEntry *pEntry = ParseLine(line);
+        if (!pEntry)
+        {
+            printf(ANSI_COLOR_YELLOW"WARNING: Cannot parse the following line:\n"ANSI_COLOR_RESET);
+            printf("%s\n", line);
+            continue;
+        }
+        AddEntry(&entries, pEntry);
     }
     fclose(pFile);
     return entries;
 }
 
+// Returns a pointer to PhonebookEntry on success. Returns NULL on failure.
 PhonebookEntry *ParseLine(char *line)
 {
-    char *lastName = strtok(line, ",");
+    char *lineDup = _strdup(line);
+    char *lastName = strtok(lineDup, ",");
+    if (!lastName) return NULL;
     char *firstName = strtok(NULL, ",");
+    if (!firstName) return NULL;
     char *birthDate = strtok(NULL, ",");
+    if (!birthDate) return NULL;
     char *address = strtok(NULL, ",");
+    if (!address) return NULL;
     char *email = strtok(NULL, ",");
+    if (!email || !IsValidEmail(email)) return NULL;
     char *phone = strtok(NULL, ",");
+    if (!phone || !IsValidPhone(phone)) return NULL;
+    if (strtok(NULL, ",")) return NULL;
+    Date birthDateStruct;
+    if (!IsValidDate(birthDate, &birthDateStruct)) return NULL;
 
-    short day = atoi(strtok(birthDate, "-/"));
-    short month = atoi(strtok(NULL, "-/"));
-    short year = atoi(strtok(NULL, "-/"));
-    
-    return ConstructPhonebookEntry(lastName, firstName, (Date) { day, month, year }, address, email, phone);
+    return ConstructPhonebookEntry(lastName, firstName, birthDateStruct, address, email, phone);
 }
