@@ -12,6 +12,5 @@ void DeleteEntry(PhonebookEntries *pEntries, PhonebookEntry *pEntry)
     for (; index < pEntries->actualNumber; index++)
         pEntries->pEntries[index - 1] = pEntries->pEntries[index];
 
-    free(pEntry);
     pEntries->actualNumber--;
 }
