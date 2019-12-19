@@ -12,5 +12,4 @@ void ModifyRecord(PhonebookEntry *pOldEntry, PhonebookEntry *pNewEntry)
     if(*(pNewEntry->email)) strcpy(pOldEntry->email, pNewEntry->email);
     if(*(pNewEntry->phone)) strcpy(pOldEntry->phone, pNewEntry->phone);
     if (pNewEntry->birthDate.day) pOldEntry->birthDate = pNewEntry->birthDate;
-    free(pNewEntry);
 }

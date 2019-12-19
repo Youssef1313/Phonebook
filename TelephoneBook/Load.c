@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ANSI_COLOR_CONSTANTS.h"
 #include "Add.h"
+#include "ANSI_COLOR_CONSTANTS.h"
 #include "Load.h"
 #include "PhonebookEntry.h"
 #include "Validation.h"

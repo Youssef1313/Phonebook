@@ -57,8 +57,8 @@ The following is a list of the allowed commands to run the program:\n\n\
             printf("    When prompted to any field, leaving it empty means it won't be used in searching.\n");
             PhonebookEntry *pSearchEntry = GetEntryFromUser(true);
             PhonebookEntries filtered = Search(pSearchEntry, &entries);
-            PrintEntries(&filtered, false);
             free(pSearchEntry);
+            PrintEntries(&filtered, false);
         }
         else if (!_stricmp(command, "ADD") || !_stricmp(command, "3"))
         {
@@ -121,7 +121,8 @@ The following is a list of the allowed commands to run the program:\n\n\
                 PhonebookEntry *pEntryToModify = SelectEntry(&filtered);
                 printf("    You will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pNewEntry = GetEntryFromUser(true);
-                ModifyRecord(pEntryToModify, pNewEntry); // This function will call free on pNewEntry.
+                ModifyRecord(pEntryToModify, pNewEntry);
+                free(pNewEntry);
                 unsavedChanges = true;
                 printf(ANSI_COLOR_GREEN"Field is modified!\n\n"ANSI_COLOR_RESET);
             }
