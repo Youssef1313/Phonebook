@@ -15,7 +15,6 @@
 #include "Validation.h"
 
 // Longest commands are DELETE and MODIFY (6 chars + '\0' = 7 chars).
-// TODO: When implementing validation, implement separate functions to prompt for each field.
 #define MAX_COMMAND_LENGTH 7
 #define FILE_PATH "D:\\phonebook.txt"
 
@@ -209,7 +208,6 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     char email[MAX_EMAIL_LENGTH];
     char phone[MAX_PHONE_LENGTH];
     char dateString[11]; // 07-03-1999 (10 chars + '\0')
-    // TODO: add validation to all fields.
 
     GetString(ANSI_COLOR_YELLOW"        Enter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
     if (!allowEmpty && lastName[0] == '\0') return NULL;
