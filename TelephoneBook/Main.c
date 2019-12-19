@@ -55,7 +55,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "QUERY") || !_stricmp(command, "2"))
         {
-            printf("\tWhen prompted to any field, leaving it empty means it won't be used in searching.\n");
+            printf("    When prompted to any field, leaving it empty means it won't be used in searching.\n");
             PhonebookEntry *pSearchEntry = GetEntryFromUser(true);
             PhonebookEntries filtered = Search(pSearchEntry, &entries);
             PrintEntries(&filtered, false);
@@ -63,7 +63,7 @@ The following is a list of the allowed commands to run the program:\n\n\
         }
         else if (!_stricmp(command, "ADD") || !_stricmp(command, "3"))
         {
-            printf("\tWhen prompted to any field, leaving it empty will result in cancelling adding this record.\n");
+            printf("    When prompted to any field, leaving it empty will result in cancelling adding this record.\n");
             PhonebookEntry *pNewEntry = GetEntryFromUser(false);
             if (pNewEntry)
             {
@@ -77,15 +77,15 @@ The following is a list of the allowed commands to run the program:\n\n\
         else if (!_stricmp(command, "DELETE") || !_stricmp(command, "4"))
         {
             char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH];
-            printf("\tYou will be prompted for first and last name. If multiple records are found, you will be asked to select one.\n");
+            printf("    You will be prompted for first and last name. If multiple records are found, you will be asked to select one.\n");
             do
             {
-                GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
+                GetString(ANSI_COLOR_YELLOW"        Enter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
             } while (!*lastName);
 
             do
             {
-                GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
+                GetString(ANSI_COLOR_YELLOW"        Enter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
             } while (!*firstName);
             PhonebookEntry *pEntry = ConstructPhonebookEntry(lastName, firstName, (Date) { 0, 0, 0 }, "", "", "");
             PhonebookEntries filtered = Search(pEntry, &entries);
@@ -104,10 +104,10 @@ The following is a list of the allowed commands to run the program:\n\n\
         else if (!_stricmp(command, "MODIFY") || !_stricmp(command, "5"))
         {
             char lastName[MAX_NAME_LENGTH];
-            printf("\tYou will be prompted for last name. If multiple records are found, you will be asked to select one.\n");
+            printf("    You will be prompted for last name. If multiple records are found, you will be asked to select one.\n");
             do
             {
-                GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
+                GetString(ANSI_COLOR_YELLOW"        Enter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
             } while (!*lastName);
 
             PhonebookEntry *pEntryForSearch = ConstructPhonebookEntry(lastName, "", (Date) { 0, 0, 0 }, "", "", "");
@@ -118,7 +118,7 @@ The following is a list of the allowed commands to run the program:\n\n\
             else
             {
                 PhonebookEntry *pEntryToModify = SelectEntry(&filtered);
-                printf("\tYou will be prompted for new info, leave any field blank to keep it unchanged.\n");
+                printf("    You will be prompted for new info, leave any field blank to keep it unchanged.\n");
                 PhonebookEntry *pNewEntry = GetEntryFromUser(true);
                 ModifyRecord(pEntryToModify, pNewEntry); // This function will call free on pNewEntry.
                 unsavedChanges = true;
@@ -211,20 +211,20 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     char dateString[11]; // 07-03-1999 (10 chars + '\0')
     // TODO: add validation to all fields.
 
-    GetString(ANSI_COLOR_YELLOW"\t\tEnter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
+    GetString(ANSI_COLOR_YELLOW"        Enter last name: "ANSI_COLOR_RESET, lastName, sizeof(lastName));
     if (!allowEmpty && lastName[0] == '\0') return NULL;
 
-    GetString(ANSI_COLOR_YELLOW"\t\tEnter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
+    GetString(ANSI_COLOR_YELLOW"        Enter first name: "ANSI_COLOR_RESET, firstName, sizeof(firstName));
     if (!allowEmpty && firstName[0] == '\0') return NULL;
 
 
-    GetString(ANSI_COLOR_YELLOW"\t\tEnter address: "ANSI_COLOR_RESET, address, sizeof(address));
+    GetString(ANSI_COLOR_YELLOW"        Enter address: "ANSI_COLOR_RESET, address, sizeof(address));
     if (!allowEmpty && address[0] == '\0') return NULL;
 
 
     while (true)
     {
-        GetString(ANSI_COLOR_YELLOW"\t\tEnter email: "ANSI_COLOR_RESET, email, sizeof(email));
+        GetString(ANSI_COLOR_YELLOW"        Enter email: "ANSI_COLOR_RESET, email, sizeof(email));
         if (!allowEmpty && email[0] == '\0') return NULL;
         if (email[0] == '\0') break;
         if (IsValidEmail(email)) break;
@@ -232,7 +232,7 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
 
     while (true)
     {
-        GetString(ANSI_COLOR_YELLOW"\t\tEnter phone: "ANSI_COLOR_RESET, phone, sizeof(phone));
+        GetString(ANSI_COLOR_YELLOW"        Enter phone: "ANSI_COLOR_RESET, phone, sizeof(phone));
         if (!allowEmpty && phone[0] == '\0') return NULL;
         if (phone[0] == '\0') break;
         if (IsValidPhone(phone)) break;
@@ -242,7 +242,7 @@ PhonebookEntry *GetEntryFromUser(bool allowEmpty)
     Date birthdate = { 0, 0, 0 };
     while (true)
     {
-        GetString(ANSI_COLOR_YELLOW"\t\tEnter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: "ANSI_COLOR_RESET, dateString, sizeof(dateString));
+        GetString(ANSI_COLOR_YELLOW"        Enter birthdate on the form dd-MM-yyyy or dd/MM/yyyy: "ANSI_COLOR_RESET, dateString, sizeof(dateString));
         if (!allowEmpty && dateString[0] == '\0') return NULL; // Meaning to cancel.
         if (dateString[0] == '\0') break;
         if (IsValidDate(dateString, &birthdate)) break;
