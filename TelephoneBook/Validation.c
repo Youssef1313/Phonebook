@@ -76,7 +76,8 @@ bool IsValidPhone(char *phone)
 {
     for (int i = 0, n = strlen(phone); i < n; i++)
     {
-        if (phone[i] < '0' || phone[i] > '9') return false;
+        // Most ASCII characters are larger than the digits. Hence, check the > 9 condition first because it's more likely to fail than < 0.
+        if (phone[i] > '9' || phone[i] < '0') return false;
     }
     return true;
 }
