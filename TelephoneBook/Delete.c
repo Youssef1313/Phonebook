@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include "Delete.h"
 #include "PhonebookEntry.h"
 
