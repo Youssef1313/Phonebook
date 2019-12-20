@@ -35,7 +35,9 @@ PhonebookEntries Load(char *fileName)
     {
         int length = strlen(line);
         if (line[length - 1] == '\n') line[length - 1] = '\0';
-        PhonebookEntry *pEntry = ParseLine(line);
+        char *lineDup = _strdup(line); // ParseLine does strtok, so duplicating to avoid line corruption.
+        PhonebookEntry *pEntry = ParseLine(lineDup);
+        free(lineDup); // _strdup does dynamic memory allocation. Hence, this memory needs to be freed.
         if (!pEntry)
         {
             printf(ANSI_COLOR_YELLOW"WARNING: Cannot parse the following line:\n"ANSI_COLOR_RESET);
@@ -51,8 +53,7 @@ PhonebookEntries Load(char *fileName)
 // Returns a pointer to PhonebookEntry on success. Returns NULL on failure.
 PhonebookEntry *ParseLine(char *line)
 {
-    char *lineDup = _strdup(line);
-    char *lastName = strtok(lineDup, ",");
+    char *lastName = strtok(line, ",");
     if (!lastName) return NULL;
     char *firstName = strtok(NULL, ",");
     if (!firstName) return NULL;
