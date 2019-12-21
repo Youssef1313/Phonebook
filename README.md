@@ -24,3 +24,7 @@ REG ADD HKCU\CONSOLE /f /v VirtualTerminalLevel /t REG_DWORD /d 1
 > Credits goes to [this answer](https://stackoverflow.com/a/56150498/5108631) on stackoverflow.
 
 **Another solution** is to run the *EnableColors.bat* file besides this *README.md* file. It will automatically run the previous command and enable the ANSI escape code in the registry.
+
+## User manual
+
+Before you start using the program, please, read the user manual (*User-manual.pdf*) file to get an idea on how to use this program.
