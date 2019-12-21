@@ -14,12 +14,19 @@ PhonebookEntry *ConstructPhonebookEntry(char *lastName, char *firstName, Date bi
         printf(ANSI_COLOR_RED"Failed to allocate memory. Program will exit.\n"ANSI_COLOR_RESET);
         exit(-1);
     }
-    strcpy(pEntry->lastName, lastName);
-    strcpy(pEntry->firstName, firstName);
+    strncpy(pEntry->lastName, lastName, sizeof(pEntry->lastName));
+    strncpy(pEntry->firstName, firstName, sizeof(pEntry->firstName));
     pEntry->birthDate = birthDate;
-    strcpy(pEntry->address, address);
-    strcpy(pEntry->email, email);
-    strcpy(pEntry->phone, phone);
+    strncpy(pEntry->address, address, sizeof(pEntry->address));
+    strncpy(pEntry->email, email, sizeof(pEntry->email));
+    strncpy(pEntry->phone, phone, sizeof(pEntry->phone));
+
+    // strncpy doesn't ensure that the string is null-terminated. Do it manually.
+    pEntry->lastName[sizeof(pEntry->lastName) - 1] = '\0';
+    pEntry->firstName[sizeof(pEntry->firstName) - 1] = '\0';
+    pEntry->address[sizeof(pEntry->address) - 1] = '\0';
+    pEntry->email[sizeof(pEntry->email) - 1] = '\0';
+    pEntry->phone[sizeof(pEntry->phone) - 1] = '\0';
     return pEntry;
 }
 
