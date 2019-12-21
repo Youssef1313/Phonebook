@@ -34,7 +34,7 @@ bool IsValidDate(char *dateString, Date *pDate)
             return pDate->day >= 1 && pDate->day <= 31;
 
         if (pDate->month == 4 || pDate->month == 6 || pDate->month == 9 || pDate->month == 11)
-            return pDate->day >= 1 && pDate->day <= 31;
+            return pDate->day >= 1 && pDate->day <= 30;
 
         if (pDate->month == 2 && pDate->day <= 28 && pDate->day >= 1)
             return true;
