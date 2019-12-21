@@ -6,11 +6,15 @@
 
 int CompareDates(Date date1, Date date2)
 {
-    int hashCode1 = date1.year * 10000 + date1.month * 100 + date1.day; // 07-03-1999 --> 19990000 + 300 + 7  --> 19990307
+    if (date1.year != date2.year) return date1.year - date2.year;
+    if (date1.month != date2.month) return date1.month - date2.month;
+    return date1.day - date2.day;
+
+    /*int hashCode1 = date1.year * 10000 + date1.month * 100 + date1.day; // 07-03-1999 --> 19990000 + 300 + 7  --> 19990307
     int hashCode2 = date2.year * 10000 + date2.month * 100 + date2.day; // 20-02-1999 ---> 19990000 + 200 + 20 --> 19990220
     if (hashCode1 > hashCode2) return 1;
     if (hashCode1 < hashCode2) return -1;
-    return 0;
+    return 0;*/
 
     /*
     char buff1[9];
