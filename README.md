@@ -1,8 +1,8 @@
-# Telephone Book Project in C
+# Phonebook Project in C
 
 My final project for programming 1 course.
 
-**Note:** This project is built using Visual Studio IDE. It might not work directly in other IDEs like CodeBlocks without a slight modifications.
+**Note:** This project is built using Visual Studio IDE. It might not work in other IDEs like CodeBlocks without a slight modifications.
 
 ## Coding style
 
@@ -12,3 +12,15 @@ My final project for programming 1 course.
 - Prefix pointer variables with `p`. For example, `Date *pBirthDate`, not `Date *birthDate`. `char *` is an exception if the variable name is obvious to be a string.
 - Use allman braces. Curly braces should be put in their own line.
 - Use 4 spaces indentation instead of a tab. To let Visual Studio do that for you, **Tools** > **Options** > **Text Editor** > **C/C++** > **Tabs** > **Insert spaces**.
+
+## Colored output
+
+The printed output should be shown in colors. If you're getting strange characters at the beginning of the `printf`s, You'll need to run the following command in the cmd and re-open the program:
+
+```
+REG ADD HKCU\CONSOLE /f /v VirtualTerminalLevel /t REG_DWORD /d 1
+```
+
+> Credits goes to [this answer](https://stackoverflow.com/a/56150498/5108631) on stackoverflow.
+
+**Another solution** is to run the *EnableColors.bat* file besides this *README.md* file. It will automatically run the previous command and enable the ANSI escape code in the registry.
