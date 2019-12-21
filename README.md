@@ -2,6 +2,8 @@
 
 My final project for programming 1 course.
 
+**Note:** This project is built using Visual Studio IDE. It might not work directly in other IDEs like CodeBlocks without a slight modifications.
+
 ## Coding style
 
 - Use PascalCase for functions (except for `main`), structs, and unions names.

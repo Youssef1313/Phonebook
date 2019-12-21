@@ -51,7 +51,7 @@ bool IsValidEmail(char *email)
     int lastAtIndex;
 
     int countDotSign = 0;
-    int lastDotIndex;
+    int lastDotIndex = 0;
 
     int length = strlen(email);
     for (int i = 0; i < length; i++)
@@ -63,6 +63,7 @@ bool IsValidEmail(char *email)
         }
         else if (email[i] == '.')
         {
+            if (i - lastDotIndex == 1) return false; // 2 consecutive dots are not valid.
             countDotSign++;
             lastDotIndex = i;
         }
