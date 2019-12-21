@@ -67,6 +67,10 @@ bool IsValidEmail(char *email)
             countDotSign++;
             lastDotIndex = i;
         }
+        else if (email[i] == ' ')
+        {
+            return false;
+        }
     }
     return (countAtSign == 1 && lastAtIndex != 0 && countDotSign >= 1 &&
         lastDotIndex - lastAtIndex >= 2 &&
